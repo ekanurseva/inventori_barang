@@ -1,7 +1,7 @@
 <div class="sidebar" id="side_nav">
     <!--PROFIL-->
     <div class="content-side">
-        <div class="profil pt-4">
+        <div class="profil pt-3">
             <div class="row d-flex align-items-center">
                 <div class="col-sm-5 me-0">
                     <img src="../img/default.png" class="rounded-circle" alt="profi">
@@ -20,7 +20,7 @@
 
         <!-- menu -->
         <div class="">
-            <ul class="list-unstyled pt-4 fw-medium">
+            <ul class="list-unstyled pt-3 fw-medium">
                 <li class="">
                     <a href="../admin/barang.php" class="text-decoration-none d-block">
                         <span>Manajemen Barang</span>
@@ -34,6 +34,11 @@
                 <li class="">
                     <a href="../admin/barang_keluar.php" class="text-decoration-none d-block">
                         <span>Manajemen Barang Keluar</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="../admin/laporan.php" class="text-decoration-none d-block">
+                        <span>Manajemen Laporan</span>
                     </a>
                 </li>
                 <li class="">
@@ -58,15 +63,5 @@
                 </li>
             </ul>
         </div>
-        <hr class="hr-color">
-
-        <ul class="list-unstyled fw-medium pb-5">
-            <li>
-                <a href="../logout.php" class="text-decoration-none d-block">
-                    <i class="bi bi-box-arrow-right fs-5"></i>
-                    <span>Logout</span>
-                </a>
-            </li>
-        </ul>
     </div>
 </div>

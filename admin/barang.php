@@ -43,18 +43,28 @@
                     </div>
 
                     <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../insert/barang.php">Tambah Data</a>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <a class="btn btn-primary" href="../insert/barang.php">Tambah Data Barang</a>
+                            </div>
+                            <!-- <div class="col-sm-4">
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#bahan_baku">
+                                    Tambah Bahan Baku
+                                </button>
+                            </div> -->
+                        </div>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="mt-4 box3">
+                        <h4 class="text-center">Tabel Barang</h4>
+                        <hr>
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
                                     <th class="text-center" scope="col">Nama Barang</th>
                                     <th class="text-center" scope="col">Kategori</th>
                                     <th class="text-center" scope="col">Merk</th>
-                                    <th class="text-center" scope="col">Gudang</th>
-                                    <th class="text-center" scope="col">Rak</th>
                                     <th class="text-center" scope="col">Stok</th>
                                     <th class="text-center" scope="col">Satuan</th>
                                     <th class="text-center" scope="col">Aksi</th>
@@ -72,12 +82,6 @@
                                         merk barang
                                     </td>
                                     <td>
-                                        1
-                                    </td>
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>
                                         3
                                     </td>
                                     <td>
@@ -85,13 +89,18 @@
                                     </td>
 
                                     <td>
-                                        <a href="../edit/barang.php" class="btn btn-sm btn-primary">
-                                            <i class="bi bi-pencil-fill"></i>
+                                        <a class="text-decoration-none" href="../edit/barang.php">
+                                            <button class="btn btn-primary"><i class="bi bi-pencil-fill"></i></button>
                                         </a>
                                         |
-                                        <button type="button" class="btn btn-danger btn-sm" id="delete">
-                                            <i class="bi bi-trash-fill"></i>
+                                        <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                            data-bs-target="#detail_barang">
+                                            <i class="bi bi-info-lg"></i>
                                         </button>
+                                        |
+                                        <a class="delete bg-danger" id="delete" onclick="confirmDelete()">
+                                            <button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                                        </a>
                                     </td>
                                 </tr>
 
@@ -99,12 +108,97 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="detail_barang" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content p-3">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                    Informasi Es Cincau
+                                </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-3 text-center">
+                                        <img src="../img/cincau.jpg" class="img-preview" style="width: 130px;">
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <div class="row m-0 p-0">
+                                            <div class="col-sm-4">
+                                                <h6>Kategori</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: Happy Es</h7>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h6>Merk</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: Merk barang</h7>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h6>Gudang</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: A</h7>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h6>Rak</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: 1</h7>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h6>Stok</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: 20</h7>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h6>Satuan</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: Dus</h7>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h6>Harga Satuan</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: Rp. 5000</h7>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <h6>Keterangan</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h7>: -</h7>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- konten selesai -->
             </div>
 
         </div>
-
-
     </div>
 
     <!-- bootstrap js -->

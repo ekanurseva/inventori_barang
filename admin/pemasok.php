@@ -42,19 +42,13 @@
                         </h5>
                     </div>
 
-                    <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../insert/pemasok.php">Tambah Data</a>
-                    </div>
-
                     <div class="mt-4">
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
                                     <th class="text-center" scope="col">Nama</th>
-                                    <th class="text-center" scope="col">Username</th>
                                     <th class="text-center" scope="col">Instansi</th>
                                     <th class="text-center" scope="col">No Handphone</th>
-                                    <th class="text-center" scope="col">Email</th>
                                     <th class="text-center" scope="col">Aksi</th>
                                 </tr>
                             </thead>
@@ -64,25 +58,15 @@
                                         Siti
                                     </td>
                                     <td>
-                                        siti21
-                                    </td>
-                                    <td>
                                         PT. Apa
                                     </td>
                                     <td>
                                         0893621329311
                                     </td>
                                     <td>
-                                        siti21@gmail.com
-                                    </td>
-                                    <td>
-                                        <a href="../edit/pemasok.php" class="btn btn-sm btn-primary">
-                                            <i class="bi bi-pencil-fill"></i>
+                                        <a href="../admin/detail_pemasok.php" class="btn btn-sm btn-primary">
+                                            Detail
                                         </a>
-                                        |
-                                        <button type="button" class="btn btn-danger btn-sm" id="delete">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             </tbody>

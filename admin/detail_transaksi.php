@@ -43,30 +43,38 @@
                     </div>
 
                     <div class="text-center mt-4">
-                        <h6>Pesanan Pada <b>Pemasok 1</b></h6>
                         <div class="row">
+                            <div class="col-1">
+                                <a href="../admin/transaksi.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
+                            </div>
+                            <div class="col-10">
+                                <h6>Nama Pemasok : <b>Pemasok 1</b></h6>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
                             <div class="col-sm-4">
-                                <h6>12-12-2023 10:12:05</h6>
+                                <h6>12-12-2023 | 10:12:05</h6>
                             </div>
                             <div class="col-sm-4">
-                                <h6>Kode Permintaan</h6>
+                                <h6>S001001</h6>
                             </div>
                             <div class="col-sm-4">
-                                Status : <b>Diterima</b>
+                                Status : <b>Belum Diproses</b>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../insert/pesanan.php">Tambah Pesanan</a>
+                        <a class="btn btn-primary" href="../insert/permintaan.php">Tambah Permintaan</a>
                     </div>
 
                     <div class="mt-4">
-                        <table id="example" class="table table-hover text-center">
+                        <table class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
                                     <th class="text-center" scope="col">Barang Pesanan</th>
                                     <th class="text-center" scope="col">Jumlah</th>
+                                    <th class="text-center" scope="col">Total</th>
                                     <th class="text-center" scope="col">Aksi</th>
                                 </tr>
                             </thead>
@@ -79,7 +87,10 @@
                                         2
                                     </td>
                                     <td>
-                                        <a href="../edit/pesanan.php" class="btn btn-sm btn-primary">
+                                        Rp 100.000
+                                    </td>
+                                    <td>
+                                        <a href="../edit/transaksi.php" class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                         |
@@ -87,6 +98,14 @@
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <th>Total Pembayaran</th>
+                                    <th>
+                                        Rp 100.000
+                                    </th>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -107,11 +126,6 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#example").DataTable();
-        });
-    </script>
 </body>
 
 </html>

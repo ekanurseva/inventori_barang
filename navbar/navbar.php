@@ -8,9 +8,15 @@
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active text-white fw-semibold" aria-current="page">
-                        Sistem Informasi Inventory Barang</a>
+                        Sistem Informasi Inventory Barang
+                    </a>
                 </li>
             </ul>
+            <div class="d-flex ms-auto">
+                <a href="../logout.php" class="nav-link text-white text-decoration-none">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </a>
+            </div>
         </div>
     </div>
 </nav>

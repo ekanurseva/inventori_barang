@@ -54,6 +54,7 @@
                                     <th class="text-center" scope="col">Username</th>
                                     <th class="text-center" scope="col">No Handphone</th>
                                     <th class="text-center" scope="col">Email</th>
+                                    <th class="text-center" scope="col">Level</th>
                                     <th class="text-center" scope="col">Aksi</th>
                                 </tr>
                             </thead>
@@ -70,6 +71,9 @@
                                     </td>
                                     <td>
                                         siti21@gmail.com
+                                    </td>
+                                    <td>
+                                        Admin
                                     </td>
                                     <td>
                                         <a href="../edit/user.php" class="btn btn-sm btn-primary">

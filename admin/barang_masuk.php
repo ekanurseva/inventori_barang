@@ -42,20 +42,13 @@
                         </h5>
                     </div>
 
-                    <div class="mt-4 ">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pesanan">
-                            Buat Laporan
-                        </button>
-                    </div>
-
                     <div class="mt-4">
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
                                     <th class="text-center" scope="col">Pemasok</th>
-                                    <th class="text-center" scope="col">Kode Permintaan</th>
-                                    <th class="text-center" scope="col">Tanggal Transaksi</th>
-                                    <th class="text-center" scope="col">Jumlah Barang</th>
+                                    <th class="text-center" scope="col">Nomor Bukti</th>
+                                    <th class="text-center" scope="col">Tanggal Permintaan</th>
                                     <th class="text-center" scope="col">Status</th>
                                     <th class="text-center" scope="col">Aksi</th>
                                 </tr>
@@ -66,7 +59,10 @@
                                         Pemasok 1
                                     </td>
                                     <td>
-                                        12-12-2023 10:12:05
+                                        S001001
+                                    </td>
+                                    <td>
+                                        12-12-2023 | 10:12:05
                                     </td>
                                     <td>
                                         Diterima
@@ -120,10 +116,7 @@
                 </div>
             </div>
             <!-- Modal Input Penimbangan = Pilih Balita Selesai -->
-
         </div>
-
-
     </div>
 
     <!-- bootstrap js -->
@@ -139,4 +132,3 @@
         });
     </script>
 </body>
-\

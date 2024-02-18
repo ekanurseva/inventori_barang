@@ -49,6 +49,7 @@
                                     <th class="text-center" scope="col">Kode Transaksi</th>
                                     <th class="text-center" scope="col">Pelanggan</th>
                                     <th class="text-center" scope="col">Tanggal Transaksi</th>
+                                    <th class="text-center" scope="col">Status</th>
                                     <th class="text-center" scope="col">Aksi</th>
                                 </tr>
                             </thead>
@@ -62,6 +63,9 @@
                                     </td>
                                     <td>
                                         12-12-2023 10:12:05
+                                    </td>
+                                    <td>
+                                        Belum Diproses
                                     </td>
                                     <td>
                                         <a href="../admin/detail_pesanan.php" class="btn btn-sm btn-primary">

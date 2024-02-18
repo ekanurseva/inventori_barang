@@ -8,6 +8,8 @@
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <title>Sistem Informasi Inventory Barang</title>
 
     <!-- css -->
@@ -44,55 +46,61 @@
 
                     <form method="post" action="">
                         <div class="mb-3 mt-4 row ms-5">
-                            <label for="inputNama" class="col-sm-2 me-0 col-form-label">Nama Lengkap:</label>
-                            <div class="col-sm-8">
+                            <label for="inputNama" class="col-sm-3 me-0 col-form-label">Nama Lengkap:</label>
+                            <div class="col-sm-7">
                                 <input type="text" class="form-control" id="inputNama">
                             </div>
                         </div>
-                        <div class="mb-3 mt-4 row ms-5">
-                            <label for="username" class="col-sm-2 me-0 col-form-label">Username :</label>
-                            <div class="col-sm-8">
+                        <div class="mb-3 mt-3 row ms-5">
+                            <label for="username" class="col-sm-3 me-0 col-form-label">Username :</label>
+                            <div class="col-sm-7">
                                 <input type="text" class="form-control" id="username">
                             </div>
                         </div>
-                        <div class="mb-3 mt-4 row ms-5">
-                            <label for="email" class="col-sm-2 me-0 col-form-label">Email
+                        <div class="mb-3 mt-3 row ms-5">
+                            <label for="email" class="col-sm-3 me-0 col-form-label">Email
                                 :</label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-7">
                                 <input type="email" class="form-control" id="email">
                             </div>
                         </div>
-                        <div class="mb-3 mt-4 row ms-5">
-                            <label for="alamat" class="col-sm-2 me-0 col-form-label">Alamat :</label>
-                            <div class="col-sm-8">
+                        <div class="mb-3 mt-3 row ms-5">
+                            <label for="alamat" class="col-sm-3 me-0 col-form-label">Alamat :</label>
+                            <div class="col-sm-7">
                                 <textarea type="text" style="border-color: black;" class="form-control" id="inputGejala"
-                                    name="alamat" rows="4"></textarea>
+                                    name="alamat" rows="2"></textarea>
                             </div>
                         </div>
-                        <div class="mb-3 mt-4 row ms-5">
-                            <label for="noHp" class="col-sm-2 me-0 col-form-label">No Handphone :</label>
-                            <div class="col-sm-8">
+                        <div class="mb-3 mt-3 row ms-5">
+                            <label for="noHp" class="col-sm-3 me-0 col-form-label">No Handphone :</label>
+                            <div class="col-sm-7">
                                 <input type="text" class="form-control" id="noHp">
                             </div>
                         </div>
-                        <div class="mb-3 mt-4 row ms-5">
-                            <label for="password" class="col-sm-2 me-0 col-form-label">Password :</label>
-                            <div class="col-sm-8">
+                        <div class="mb-3 mt-3 row ms-5">
+                            <label for="noHp" class="col-sm-3 me-0 col-form-label">Instansi :</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="noHp">
+                            </div>
+                        </div>
+                        <div class="mb-3 mt-3 row ms-5">
+                            <label for="password" class="col-sm-3 me-0 col-form-label">Password :</label>
+                            <div class="col-sm-7">
                                 <input type="password" class="form-control" id="password">
                             </div>
                         </div>
-                        <div class="mb-3 mt-4 row ms-5">
-                            <label for="password2" class="col-sm-2 me-0 col-form-label">Konfirmasi Password :</label>
-                            <div class="col-sm-8">
+                        <div class="mb-3 mt-3 row ms-5">
+                            <label for="password2" class="col-sm-3 me-0 col-form-label">Konfirmasi Password :</label>
+                            <div class="col-sm-7">
                                 <input type="password" class="form-control" id="password2">
                             </div>
                         </div>
                         <div class="mb-4 mt-2 row ms-5">
                             <label for="profil" class="col-form-label">Foto Profil</label>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <img src="../img/default.png" class="img-preview" style="width: 70px;">
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-7">
                                 <a class="btn btn-sm btn-outline-danger" id="delete" onclick="">Hapus Foto</a>
                                 <div class="input-group mb-3">
                                     <input type="file" class="form-control" style="border: 1px solid black;" id="profil"

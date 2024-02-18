@@ -44,7 +44,7 @@
 
                     <div class="mt-4 ">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pesanan">
-                            Buat Pesanan
+                            Buat Permintaan Barang
                         </button>
                     </div>
 
@@ -67,7 +67,7 @@
                                         12-12-2023 10:12:05
                                     </td>
                                     <td>
-                                        Diterima
+                                        Belum Diproses
                                     </td>
                                     <td>
                                         <a href="../admin/detail_transaksi.php" class="btn btn-sm btn-primary">
@@ -92,11 +92,11 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <form action="detail_transaksi.php" method="post">
+                        <form action="../insert/permintaan.php" method="post">
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label for="kriteria" class="form-label">Pilih Pemasok dan lakukan
-                                        permintaan</label>
+                                    <label for="kriteria" class="form-label">Pilih Pemasok Untuk Melakukan
+                                        Permintaan Barang</label>
 
                                     <div class="">
                                         <select id="kriteria" class="form-select" style="border: 1px solid black;"
