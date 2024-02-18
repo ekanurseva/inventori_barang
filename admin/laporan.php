@@ -51,10 +51,20 @@
                                         <h6 class="card-title text-center">Jumlah Barang Masuk</h6>
                                         <p class="card-text text-center">5</p>
                                         <div class="text-center">
-                                            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#masuk">
-                                                Cetak Laporan
-                                            </button>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="btn btn-outline-light btn-sm"
+                                                        href="../admin/barang_masuk.php">
+                                                        View Detail
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button class="btn btn-light btn-sm" type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#masuk">
+                                                        Cetak Laporan
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -66,10 +76,20 @@
                                         <h6 class="card-title text-center">Jumlah Barang Keluar</h6>
                                         <p class="card-text text-center">5</p>
                                         <div class="text-center">
-                                            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#keluar">
-                                                Cetak Laporan
-                                            </button>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="btn btn-outline-light btn-sm"
+                                                        href="../admin/barang_keluar.php">
+                                                        View Detail
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button class="btn btn-light btn-sm" type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#keluar">
+                                                        Cetak Laporan
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -81,10 +101,20 @@
                                         <h6 class="card-title text-center">Jumlah Permintaan Barang</h6>
                                         <p class="card-text text-center">5</p>
                                         <div class="text-center">
-                                            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#permintaan">
-                                                Cetak Laporan
-                                            </button>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="btn btn-outline-light btn-sm"
+                                                        href="../admin/transaksi.php">
+                                                        View Detail
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button class="btn btn-light btn-sm" type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#permintaan">
+                                                        Cetak Laporan
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -99,10 +129,19 @@
                                         <h6 class="card-title text-center">Jumlah Barang</h6>
                                         <p class="card-text text-center">5</p>
                                         <div class="text-center">
-                                            <a class="btn btn-light btn-sm" href="../laporan/barang.php"
-                                                target="_blank">
-                                                Cetak Laporan
-                                            </a>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="btn btn-outline-light btn-sm" href="../admin/barang.php">
+                                                        View Detail
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <a class="btn btn-light btn-sm" href="../laporan/barang.php"
+                                                        target="_blank">
+                                                        Cetak Laporan
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -114,9 +153,19 @@
                                         <h6 class="card-title text-center">Jumlah Barang</h6>
                                         <p class="card-text text-center">5</p>
                                         <div class="text-center">
-                                            <a class="btn btn-light btn-sm" href="../laporan/stok.php" target="_blank">
-                                                Cetak Laporan
-                                            </a>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a class="btn btn-outline-light btn-sm" href="../admin/barang.php">
+                                                        View Detail
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <a class="btn btn-light btn-sm" href="../laporan/stok.php"
+                                                        target="_blank">
+                                                        Cetak Laporan
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
