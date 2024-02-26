@@ -39,7 +39,7 @@
 
                     <div class="text-center mt-4">
                         <div class="row">
-                            <div class="col-2">
+                            <div class="col-1">
                                 <a href="../pemasok/pesanan.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
                             </div>
                             <div class="col-10">
@@ -92,7 +92,7 @@
                                         Rp 100.000
                                     </td>
                                     <td>
-                                        <a href="../edit/pesan_bahan.php" class="btn btn-sm btn-primary">
+                                        <a href="../edit/pesanan.php" class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                         |

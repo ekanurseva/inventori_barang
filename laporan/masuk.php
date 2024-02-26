@@ -54,7 +54,7 @@ $html = '<!DOCTYPE html>
             <tr>
                 <th>NO</th>
                 <th>NOMOR BUKTI</th>
-                <th>TANGGAL PERMINTAAN BARANG</th>
+                <th>TANGGAL MASUK BARANG</th>
                 <th>PEMASOK</th>
                 <th>PERMINTAAN BARANG</th>
                 <th>JUMLAH</th>

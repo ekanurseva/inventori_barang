@@ -58,8 +58,6 @@ $html = '<!DOCTYPE html>
                 <th>MERK</th>
                 <th>GUDANG</th>
                 <th>RAK</th>
-                <th>STOK</th>
-                <th>SATUAN</th>
                 <th>HARGA</th>
                 <th>KETERANGAN</th>
             </tr>';
@@ -71,8 +69,6 @@ $html .= '<tr>
                             <td>Merk Barang</td>
                             <td>A</td>
                             <td>1</td>
-                            <td>30</td>
-                            <td>Dus</td>
                             <td>Rp 5.000</td>
                             <td>-</td>
                         </tr>';

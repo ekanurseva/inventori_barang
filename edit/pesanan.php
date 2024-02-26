@@ -28,17 +28,12 @@
 
         <div class="main-container m-0">
             <div class="d-flex">
-                <!-- sidebar -->
-                <?php
-                require_once('../navbar/sidebar.php');
-                ?>
-                <!-- sidebar selesai -->
 
                 <!-- konten -->
                 <div class="contents px-3 py-3">
                     <div class="box1">
                         <h5 class="text-dark text-center mb-0 ms-4 fw-bold">
-                            Transaksi Permintaan Barang
+                            Detail Transaksi Permintaan Barang
                         </h5>
                     </div>
 
@@ -63,7 +58,7 @@
 
                         <div class="d-flex justify-content-end me-5">
                             <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
-                                href="../admin/detail_transaksi.php">Kembali</a>
+                                href="../pemasok/detail.php">Kembali</a>
                             <button type="button" class="btn btn-primary mt-3 px-4"
                                 style="border-radius: 15px;">Update</button>
                         </div>

@@ -38,19 +38,19 @@
                     <div class="text-center mt-4">
                         <div class="row">
                             <div class="col-sm-4">
-                                <h6>12-12-2023 | 10:12:05</h6>
+                                Status : <b>Belum Diproses</b>
                             </div>
                             <div class="col-sm-4">
                                 <h6>TP-121223</h6>
                             </div>
                             <div class="col-sm-4">
-                                Status : <b>Belum Diproses</b>
+                                <h6>12-12-2023 | 10:12:05</h6>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../insert/permintaan.php">Tambah Pesanan</a>
+                        <a class="btn btn-primary" href="../pelanggan">Tambah Pesanan</a>
                     </div>
 
                     <div class="mt-4">
@@ -75,7 +75,7 @@
                                         Rp 100.000
                                     </td>
                                     <td>
-                                        <a href="../edit/transaksi.php" class="btn btn-sm btn-primary">
+                                        <a href="../edit/pesanan.php" class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                         |

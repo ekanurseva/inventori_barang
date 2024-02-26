@@ -48,7 +48,7 @@
                                 <tr class="table-secondary">
                                     <th class="text-center" scope="col">Pemasok</th>
                                     <th class="text-center" scope="col">Nomor Bukti</th>
-                                    <th class="text-center" scope="col">Tanggal Permintaan</th>
+                                    <th class="text-center" scope="col">Tanggal Masuk</th>
                                     <th class="text-center" scope="col">Status</th>
                                     <th class="text-center" scope="col">Aksi</th>
                                 </tr>
@@ -59,7 +59,7 @@
                                         Pemasok 1
                                     </td>
                                     <td>
-                                        S001001
+                                        A-0001
                                     </td>
                                     <td>
                                         12-12-2023 | 10:12:05
@@ -68,7 +68,7 @@
                                         Diterima
                                     </td>
                                     <td>
-                                        <a href="../admin/detail_transaksi.php" class="btn btn-sm btn-primary">
+                                        <a href="../admin/detail_barang_masuk.php" class="btn btn-sm btn-primary">
                                             Detail
                                         </a>
                                     </td>
@@ -81,28 +81,27 @@
             </div>
 
             <!-- Modal Input Permintaan = Pilih Pemasok -->
-            <div class="modal fade" id="pesanan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            <div class="modal fade" id="barang_masuk" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="ciriLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="ciriLabel">Transaksi Permintaan Barang</h1>
+                            <h1 class="modal-title fs-5" id="ciriLabel">Daftar Barang Masuk</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <form action="detail_transaksi.php" method="post">
+                        <form action="barang_masuk.php" method="post">
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label for="kriteria" class="form-label">Pilih Pemasok dan lakukan
-                                        permintaan</label>
+                                    <label for="kriteria" class="form-label">Inputkan Barang Masuk</label>
 
                                     <div class="">
-                                        <select id="kriteria" class="form-select" style="border: 1px solid black;"
-                                            aria-label="Default select example" name="pemasok">
-                                            <option value="pemasok">
-                                                Pemasok 1
-                                            </option>
-                                        </select>
+                                        <input type="text" class="form-control mt-3" value="S001001" readonly disabled>
+                                        <input type="text" class="form-control mt-3" placeholder="Masukkan Pemasok">
+                                        <input type="text" class="form-control mt-3" placeholder="Masukkan Barang">
+                                        <input type="text" class="form-control mt-3" placeholder="Masukkan Jumlah">
+                                        <input type="text" class="form-control mt-3"
+                                            placeholder="Masukkan Harga Barang">
                                     </div>
                                 </div>
                             </div>

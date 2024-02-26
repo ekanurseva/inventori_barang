@@ -68,7 +68,7 @@
                                         Rp 100.000
                                     </td>
                                     <td>
-                                        <a href="../admin/detail_pesanan.php" class="btn btn-sm btn-primary">
+                                        <a href="../admin/detail_barang_keluar.php" class="btn btn-sm btn-primary">
                                             Detail
                                         </a>
                                     </td>

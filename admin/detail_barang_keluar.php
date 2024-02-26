@@ -45,27 +45,23 @@
                     <div class="text-center mt-4">
                         <div class="row">
                             <div class="col-1">
-                                <a href="../admin/transaksi.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
+                                <a href="../admin/barang_masuk.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
                             </div>
                             <div class="col-10">
-                                <h6>Nama Pemasok : <b>Pemasok 1</b></h6>
+                                <h6>Nama Pelanggan : <b>Eka</b></h6>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-sm-4">
-                                Status : <b>Belum Diproses</b>
+                                Status : <b>Selesai</b>
                             </div>
                             <div class="col-sm-4">
-                                <h6>S001001</h6>
+                                <h6>TP-20240201</h6>
                             </div>
                             <div class="col-sm-4">
                                 <h6>12-12-2023 | 10:12:05</h6>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../insert/permintaan.php">Tambah Permintaan</a>
                     </div>
 
                     <div class="mt-4">
@@ -75,28 +71,18 @@
                                     <th class="text-center" scope="col">Barang Pesanan</th>
                                     <th class="text-center" scope="col">Jumlah</th>
                                     <th class="text-center" scope="col">Total</th>
-                                    <th class="text-center" scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>
-                                        Tepung
+                                        Cincau
                                     </td>
                                     <td>
                                         2
                                     </td>
                                     <td>
                                         Rp 100.000
-                                    </td>
-                                    <td>
-                                        <a href="../edit/permintaan.php" class="btn btn-sm btn-primary">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-                                        |
-                                        <button type="button" class="btn btn-danger btn-sm" id="delete">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -105,7 +91,6 @@
                                     <th>
                                         Rp 100.000
                                     </th>
-                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>

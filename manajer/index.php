@@ -34,7 +34,7 @@
                 <div class="contents p-5 pt-3">
                     <div class="mb-5 mt-3">
                         <div class="row">
-                            <div class="card bg-primary text-white col-5 me-5">
+                            <div class="card bg-primary text-white col-3 me-4">
                                 <h6 class="card-header fw-bold">Data User</h6>
                                 <div class="card-body">
                                     <h6 class="card-title text-center">Jumlah User</h6>
@@ -47,13 +47,26 @@
                                 </div>
                             </div>
 
-                            <div class="card bg-primary text-white col-5">
+                            <div class="card bg-primary text-white col-3 me-4">
                                 <h6 class="card-header fw-bold">Manajemen Laporan</h6>
                                 <div class="card-body">
                                     <h6 class="card-title text-center">Jumlah Jenis Laporan</h6>
                                     <p class="card-text text-center">5</p>
                                     <div class="text-center">
                                         <a class="btn btn-light btn-sm" href="../admin/laporan.php">
+                                            View
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card bg-primary text-white col-3">
+                                <h6 class="card-header fw-bold">Update Profil</h6>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center">Manajer 1</h6>
+                                    <p class="card-text text-center">PT. Apa</p>
+                                    <div class="text-center">
+                                        <a class="btn btn-light btn-sm" href="../manajer/profil.php">
                                             View
                                         </a>
                                     </div>

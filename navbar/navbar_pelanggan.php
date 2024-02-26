@@ -16,8 +16,11 @@
                 <a href="index.php" class="btn btn-light btn-sm me-2">
                     Home
                 </a>
-                <a href="riwayat.php" class="btn btn-light btn-sm">
+                <a href="riwayat.php" class="btn btn-light btn-sm me-2">
                     Riwayat Pesanan
+                </a>
+                <a href="profil.php" class="btn btn-light btn-sm">
+                    Profil
                 </a>
             </div>
             <div class="d-flex ms-auto">
