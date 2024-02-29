@@ -1,3 +1,10 @@
+<?php 
+    session_start();
+    require_once '../controller/UserController.php';
+
+    $data_user = query("SELECT * FROM user");
+?>
+
 <html lang="en">
 
 <head>
@@ -50,6 +57,7 @@
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Nama</th>
                                     <th class="text-center" scope="col">Username</th>
                                     <th class="text-center" scope="col">No Handphone</th>
@@ -59,32 +67,43 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        Siti
-                                    </td>
-                                    <td>
-                                        siti21
-                                    </td>
-                                    <td>
-                                        0893621329311
-                                    </td>
-                                    <td>
-                                        siti21@gmail.com
-                                    </td>
-                                    <td>
-                                        Admin
-                                    </td>
-                                    <td>
-                                        <a href="../edit/user.php" class="btn btn-sm btn-primary">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-                                        |
-                                        <button type="button" class="btn btn-danger btn-sm" id="delete">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($data_user as $daus) :
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $daus['nama']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $daus['username']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $daus['telepon']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $daus['email']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $daus['level']; ?>
+                                        </td>
+                                        <td>
+                                            <a href="../edit/user.php?id=<?= enkripsi($daus['iduser']); ?>" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            |
+                                            <button type="button" class="btn btn-danger btn-sm" id="delete">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>

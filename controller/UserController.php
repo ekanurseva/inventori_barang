@@ -29,16 +29,27 @@
         $email = htmlspecialchars($data['email']);
         $telepon = htmlspecialchars($data['telepon']);
         $alamat = htmlspecialchars($data['alamat']);
+        $instansi = htmlspecialchars($data['instansi']);
         $level = htmlspecialchars($data['level']);
         $namaFile = $_FILES['foto']['name'];
 
         if($username == "") {
             $errors['username'] = "Username harus diisi!";
         } else {
-            $cari_user = query("SELECT username FROM user WHERE username = '$username'");
+            if(isset($data['oldusername'])) {
+                if($data['oldusername'] != $username) {
+                    $cari_user = query("SELECT username FROM user WHERE username = '$username'");
 
-            if(count($cari_user) > 0) {
-                $errors['username'] = "Username sudah dipakai!";
+                    if(count($cari_user) > 0) {
+                        $errors['username'] = "Username sudah dipakai!";
+                    }        
+                } 
+            } else {
+                $cari_user = query("SELECT username FROM user WHERE username = '$username'");
+    
+                if(count($cari_user) > 0) {
+                    $errors['username'] = "Username sudah dipakai!";
+                }
             }
         }
 
@@ -53,10 +64,20 @@
         if($email == "") {
             $errors['email'] = "Email harus diisi!";
         } else {
-            $cari_user = query("SELECT email FROM user WHERE email = '$email'");
+            if(isset($data['oldemail'])) {
+                if($data['email'] != $email) {
+                    $cari_user = query("SELECT email FROM user WHERE email = '$email'");
 
-            if(count($cari_user) > 0) {
-                $errors['email'] = "Email sudah dipakai!";
+                    if(count($cari_user) > 0) {
+                        $errors['email'] = "Email sudah dipakai!";
+                    }        
+                }
+            } else {
+                $cari_user = query("SELECT email FROM user WHERE email = '$email'");
+    
+                if(count($cari_user) > 0) {
+                    $errors['email'] = "Email sudah dipakai!";
+                }
             }
         }
 
@@ -70,6 +91,12 @@
 
         if($alamat == "") {
             $errors['alamat'] = "Alamat harus diisi!";
+        }
+
+        if($level == "Pemasok") {
+            if($instansi == "") {
+                $errors['instansi'] = "Jika level adalah Pemasok maka instansi harus diisi!";    
+            }
         }
 
         if($level == "") {
@@ -171,5 +198,14 @@
         $error = true;
 
         return $error;
+    }
+
+    function update($data) {
+        global $conn;
+        $errors = validation($data);
+
+        if(count($errors) > 0) {
+            return $errors;
+        } 
     }
 ?>

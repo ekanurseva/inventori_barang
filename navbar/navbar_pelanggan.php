@@ -1,3 +1,10 @@
+<?php 
+    require_once '../controller/MainController.php';
+
+    $user = cari_user();
+    validasi();
+?>
+
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -7,7 +14,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active text-white fw-semibold" aria-current="page">
+                    <a class="nav-link active text-white fw-semibold" aria-current="page" href="index.php">
                         SIIB
                     </a>
                 </li>

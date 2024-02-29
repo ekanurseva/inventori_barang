@@ -1,17 +1,21 @@
+<?php 
+    validasi_admin();
+?>
+
 <div class="sidebar" id="side_nav">
     <!--PROFIL-->
     <div class="content-side">
         <div class="profil pt-3">
             <div class="row d-flex align-items-center">
                 <div class="col-sm-5 me-0">
-                    <img src="../img/default.png" class="rounded-circle" alt="profi">
+                    <img src="../img/profil/<?= $user['foto']; ?>" class="rounded-circle" alt="profi">
                     <a href="../admin/profil.php">
                         <button class="rounded-circle"><i class="bi bi-pencil-fill"></i></button>
                     </a>
                 </div>
                 <div class="col-sm-7 text-white p-0 m-0">
                     <h6 class="fw-bold">
-                        Admin
+                        <?= $user['nama']; ?>
                     </h6>
                 </div>
             </div>

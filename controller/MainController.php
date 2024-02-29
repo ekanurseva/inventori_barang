@@ -55,48 +55,68 @@
         return $hasil;
     }
 
-    function validasi() {
-        global $conn;
-        if (!isset($_COOKIE['VRK21ZA'])) {
+    function cari_user() {
+        if (!isset($_COOKIE['SIIB'])) {
             echo "<script>
-                    document.location.href='logout.php';
+                    document.location.href='../logout.php';
                   </script>";
             exit;
         }
         
-        $id = dekripsi($_COOKIE['VRK21ZA']);
+        $id = dekripsi($_COOKIE['SIIB']);
         
-        $result = mysqli_query($conn, "SELECT * FROM user WHERE iduser = '$id'");
-        
-        if (mysqli_num_rows($result) !== 1) {
+        $result = query("SELECT * FROM user WHERE iduser = '$id'");
+
+        if(count($result) == 1) {
+            $result = $result[0];
+            return $result;
+        } else {
             echo "<script>
-                    document.location.href='logout.php';
+                    document.location.href='../logout.php';
+                  </script>";
+            exit;
+        }
+
+    }
+
+    
+    function validasi() {
+        $result = cari_user();
+        
+        if ($result['level'] != "User") {
+            echo "<script>
+                    document.location.href='../logout.php';
                   </script>";
             exit;
         }
     }
 
     function validasi_admin() {
-        global $conn;
-        if (!isset($_COOKIE['VRK21ZA'])) {
+        $result = cari_user();
+        
+        if ($result['level'] != "Admin") {
             echo "<script>
                     document.location.href='../logout.php';
                   </script>";
             exit;
         }
-        
-        $id = dekripsi($_COOKIE['VRK21ZA']);
+    }
 
-        $cek = query("SELECT * FROM user WHERE iduser = $id") [0];
+    function validasi_pemasok() {
+        $result = cari_user();
         
-        $result = mysqli_query($conn, "SELECT * FROM user WHERE iduser = '$id'");
-    
-        if (mysqli_num_rows($result) !== 1) {
+        if ($result['level'] != "Pemasok") {
             echo "<script>
                     document.location.href='../logout.php';
                   </script>";
             exit;
-        } elseif($cek['role'] !== "Admin") {
+        }
+    }
+
+    function validasi_manajer() {
+        $result = cari_user();
+        
+        if ($result['level'] != "Manajer") {
             echo "<script>
                     document.location.href='../logout.php';
                   </script>";
