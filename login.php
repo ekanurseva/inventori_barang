@@ -1,3 +1,15 @@
+<?php 
+    session_start();
+    require_once 'controller/UserController.php';
+
+    if (isset($_POST["submit"])) {
+        if(login($_POST) == 1) {
+            $error = true;
+        }
+        
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -30,18 +42,37 @@
                 <hr class="mb-5" style="color: white; opacity: 1;">
                 <div class="m-5">
                     <form method="post" action="">
+                        <?php if(isset($_SESSION['berhasil'])) : ?>
+                            <div class="mb-3">
+                                <div class="alert alert-success" role="alert">
+                                    <?= $_SESSION['berhasil']; ?>
+                                </div>
+                            </div>
+                        <?php elseif(isset($_SESSION['gagal'])) : ?>
+                            <div class="mb-3">
+                                <div class="alert alert-danger" role="alert">
+                                    <?= $_SESSION['gagal']; ?>
+                                </div>
+                            </div>
+                        <?php elseif(isset($error)) : ?>
+                            <div class="mb-3">
+                                <div class="alert alert-danger" role="alert">
+                                    Username / Password Salah
+                                </div>
+                            </div>
+                        <?php endif; ?>
                         <div class="mb-3">
-                            <input type="text" style="border-color: black;" class="form-control" placeholder="Username">
+                            <input type="text" style="border-color: black;" class="form-control" placeholder="Username" name="username">
                         </div>
                         <div class="mb-3">
                             <input type="password" style="border-color: black;" class="form-control"
-                                placeholder="Password">
+                                placeholder="Password" name="password">
                         </div>
 
                         <div class="row">
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-light mt-3 px-4"
-                                    style="border-radius: 15px;">Login</button>
+                                <button type="submit" class="btn btn-light mt-3 px-4"
+                                    style="border-radius: 15px;" name="submit">Login</button>
                             </div>
                             <a class="col-sm-6 mt-4 d-flex justify-content-end text-white" type="button"
                                 style="font-size: 13px;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -98,3 +129,9 @@
 </body>
 
 </html>
+
+<?php 
+    $_SESSION = [];
+    session_unset();
+    session_destroy();
+?>
