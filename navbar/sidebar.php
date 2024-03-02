@@ -13,7 +13,7 @@
                         <button class="rounded-circle"><i class="bi bi-pencil-fill"></i></button>
                     </a>
                 </div>
-                <div class="col-sm-7 text-white p-0 m-0">
+                <div class="col-sm-7 text-white pe-3 p-0 m-0">
                     <h6 class="fw-bold">
                         <?= $user['nama']; ?>
                     </h6>

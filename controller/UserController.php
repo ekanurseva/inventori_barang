@@ -1,7 +1,7 @@
 <?php 
     require_once 'MainController.php';
 
-    function uploadFoto() {
+    function uploadFoto($dari) {
         $namaFile = $_FILES['foto']['name'];
         $tmpName = $_FILES['foto']['tmp_name'];
         $ekstensiGambar = explode('.', $namaFile);
@@ -13,7 +13,11 @@
             $namaFileBaru .= '.';
             $namaFileBaru .= $ekstensiGambar;
             //parameternya file namenya, lalu tujuannya
-            move_uploaded_file($tmpName, 'img/profil/'.$namaFileBaru);
+            if($dari == "register") {
+                move_uploaded_file($tmpName, 'img/profil/'.$namaFileBaru);
+            } else {
+                move_uploaded_file($tmpName, '../img/profil/'.$namaFileBaru);
+            }
 
             return $namaFileBaru;
         }
@@ -140,7 +144,7 @@
             $namaFile = $_FILES['foto']['name'];
 
             if($namaFile != "") {
-                $foto = uploadFoto();
+                $foto = uploadFoto($data['dari']);
             } else {
                 $foto = "default.png";
             }
@@ -159,8 +163,6 @@
     }
 
     function login($data) {
-        global $conn;
-
         $username = htmlspecialchars($data["username"]);
         $password = htmlspecialchars($data["password"]);
 
@@ -206,6 +208,89 @@
 
         if(count($errors) > 0) {
             return $errors;
-        } 
+        } else {
+            $iduser = $data['iduser'];
+            $username = htmlspecialchars($data['username']);
+            $oldpassword = htmlspecialchars($data['oldpassword']);
+            $oldfoto = $data['oldfoto'];
+            $password = htmlspecialchars($data['password']);
+            $password2 = htmlspecialchars($data['password2']);
+            $nama = htmlspecialchars($data['nama']);
+            $email = htmlspecialchars($data['email']);
+            $telepon = htmlspecialchars($data['telepon']);
+            $alamat = htmlspecialchars($data['alamat']);
+            $level = htmlspecialchars($data['level']);
+            $namaFile = $_FILES['foto']['name'];
+
+            if($namaFile != "") {
+                $foto = uploadFoto($data['dari']);
+
+                if($oldfoto != "default.png") {
+                    unlink("../img/profil/$oldfoto");
+                }
+            } else {
+                $foto = $oldfoto;;
+            }
+
+            if($data['instansi'] == "") {
+                $instansi = NULL;
+            } else {
+                $instansi = htmlspecialchars($data['instansi']);
+            }
+
+            if($oldpassword != $password) {
+                $password = password_hash($password2, PASSWORD_DEFAULT);
+            }
+
+            $query = "UPDATE user SET 
+                    username = '$username',
+                    password = '$password',
+                    nama = '$nama',
+                    email = '$email',
+                    telepon = '$telepon',
+                    alamat = '$alamat',
+                    instansi = '$instansi',
+                    level = '$level',
+                    foto = '$foto'
+                  WHERE iduser = '$iduser'
+                ";
+            mysqli_query($conn, $query);
+
+            return mysqli_affected_rows($conn);
+        }
+    }
+
+    function delete_foto($data) {
+        global $conn;
+
+        $iduser = $data['iduser'];
+        $foto = $data['foto'];
+
+        if($foto != "default.png") {
+            unlink("../img/profil/$foto");
+        }
+
+        $query = "UPDATE user SET 
+                foto = 'default.png'
+                WHERE iduser = '$iduser'
+            ";
+        mysqli_query($conn, $query);
+
+        return mysqli_affected_rows($conn);
+    }
+
+    function delete($data) {
+        global $conn;
+
+        $iduser = $data['iduser'];
+        $foto = $data['foto'];
+
+        if($foto != "default.png") {
+            unlink("../img/profil/$foto");
+        }
+
+        mysqli_query($conn, "DELETE FROM user WHERE iduser = $iduser");
+
+        return mysqli_affected_rows($conn);
     }
 ?>

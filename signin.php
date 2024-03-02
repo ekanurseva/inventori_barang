@@ -59,6 +59,7 @@
                 <form method="post" action="" enctype="multipart/form-data">
                     <input type="hidden" name="level" id="" value="User">
                     <input type="hidden" name="instansi" id="" value="">
+                    <input type="hidden" name="dari" id="" value="register">
                     <div class="mb-3">
                         <input type="text" class="form-control <?= isset($errors['username']) ? 'is-invalid' : ''; ?>" placeholder="Username" name="username" value="<?= isset($_POST['username']) ? $_POST['username'] : ""; ?>">
                         <?php if(isset($errors['username'])) : ?>

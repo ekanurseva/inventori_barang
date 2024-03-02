@@ -17,6 +17,42 @@
             
             if(isset($_POST['submit'])) {
                 $errors = update($_POST);
+
+                if(is_numeric($errors)) {
+                    if($errors > 0) {
+                        $_SESSION["berhasil"] = "Data User Berhasil Diubah!";
+                        echo "
+                            <script>
+                                document.location.href='../admin/user.php';
+                            </script>
+                        ";
+                    } else {
+                        $_SESSION["gagal"] = "Data User Gagal Diubah!";
+                        echo "
+                            <script>
+                                document.location.href='../admin/user.php';
+                            </script>
+                        ";
+                    }
+                }
+            }
+
+            if(isset($_POST['hapus_foto'])) {
+                if(delete_foto($_POST) > 0 ) {
+                    $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
+                    echo "
+                        <script>
+                            document.location.href='../admin/user.php';
+                        </script>
+                    ";
+                } else {
+                    $_SESSION["gagal"] = "Foto Gagal Dihapus!";
+                    echo "
+                        <script>
+                            document.location.href='../admin/user.php';
+                        </script>
+                    ";
+                }
             }
         }
     } else {
@@ -70,12 +106,13 @@
                         </h5>
                     </div>
 
-
                     <form method="post" action="" enctype="multipart/form-data">
                         <input type="hidden" name="iduser" value="<?= $data['iduser']; ?>">
                         <input type="hidden" name="oldusername" value="<?= $data['username']; ?>">
                         <input type="hidden" name="oldpassword" value="<?= $data['password']; ?>">
                         <input type="hidden" name="oldemail" value="<?= $data['email']; ?>">
+                        <input type="hidden" name="oldfoto" value="<?= $data['foto']; ?>">
+                        <input type="hidden" name="dari" value="edit_user">
 
                         <div class="mb-3 mt-4 row ms-5">
                             <label for="username" class="col-sm-3 me-0 col-form-label">Username :</label>
@@ -147,7 +184,7 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="alamat" class="col-sm-3 me-0 col-form-label">Alamat :</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control <?= isset($errors['alamat']) ? 'is-invalid' : ''; ?>" id="alamat" name="alamat" rows="2"><?= isset($_POST['alamat']) ? $_POST['alamat'] : $data['alamat']; ?></textarea>
+                                <textarea <?= isset($errors['alamat']) ? '' : 'style="border: 1px solid black;"'; ?> class="form-control <?= isset($errors['alamat']) ? 'is-invalid' : ''; ?>" id="alamat" name="alamat" rows="2"><?= isset($_POST['alamat']) ? $_POST['alamat'] : $data['alamat']; ?></textarea>
                                 <?php if(isset($errors['alamat'])) : ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['alamat']; ?>
@@ -174,7 +211,10 @@
                                 <img src="../img/profil/<?= $data['foto']; ?>" class="img-preview" style="width: 70px;">
                             </div>
                             <div class="col-sm-8">
-                                <a class="btn btn-sm btn-outline-danger" id="delete" onclick="">Hapus Foto</a>
+                            <?php if($data['foto'] != "default.png") : ?>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" id="delete" data-bs-toggle="modal" data-bs-target="#exampleModal">Hapus Foto</button>
+                                <?php endif; ?>
+
                                 <div class="input-group mb-3">
                                     <input type="file" class="form-control <?= isset($errors['foto']) ? 'is-invalid' : ''; ?>" style="border: 1px solid black;" id="foto" name="foto" onchange="previewImg()">
                                     <?php if(isset($errors['foto'])) : ?>
@@ -230,6 +270,31 @@
                                 style="border-radius: 15px;" name="submit">Update</button>
                         </div>
                     </form>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Foto</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Yakin ingin menghapus foto?
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="" method="post">
+                                        <input type="hidden" name="iduser" value="<?= $data['iduser']; ?>">
+                                        <input type="hidden" name="foto" value="<?= $data['foto']; ?>">
+
+                                        <button type="submit" class="btn btn-danger" name="hapus_foto">Hapus</button>
+                                    </form>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- konten selesai -->

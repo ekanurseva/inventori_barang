@@ -3,6 +3,19 @@
     require_once '../controller/UserController.php';
 
     $data_user = query("SELECT * FROM user");
+
+    if(isset($_POST['iduser'])) {
+        if(delete($_POST) > 0 ) {
+            $_SESSION["berhasil"] = "User Berhasil Dihapus!";
+            echo "
+                            <script>
+                                document.location.href='user.php';
+                            </script>
+                        ";
+        } else {
+            $_SESSION["gagal"] = "User Gagal Dihapus!";
+        }
+    }
 ?>
 
 <html lang="en">
@@ -53,6 +66,20 @@
                         <a class="btn btn-primary" href="../insert/user.php">Tambah Data</a>
                     </div>
 
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="mt-4">
                         <table id="example" class="table table-hover text-center">
                             <thead>
@@ -95,7 +122,7 @@
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             |
-                                            <button type="button" class="btn btn-danger btn-sm" id="delete">
+                                            <button type="button" class="btn  btn-danger btn-sm" id="delete" data-bs-toggle="modal" data-bs-target="#delete_<?= $daus['iduser']; ?>">
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
                                         </td>
@@ -107,6 +134,32 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <?php foreach($data_user as $du) : ?>
+                        <!-- Modal -->
+                        <div class="modal fade" id="delete_<?= $du['iduser']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus User</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Yakin ingin menghapus data user?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="" method="post">
+                                            <input type="hidden" name="iduser" value="<?= $du['iduser']; ?>">
+                                            <input type="hidden" name="foto" value="<?= $du['foto']; ?>">
+
+                                            <button type="submit" class="btn btn-danger" name="hapus_foto">Hapus</button>
+                                        </form>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
                 <!-- konten selesai -->
             </div>
@@ -131,3 +184,11 @@
 </body>
 
 </html>
+
+<?php 
+    if(!isset($_POST['iduser'])) {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>
