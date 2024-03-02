@@ -170,7 +170,7 @@
                             </div>
                             <div class="col-sm-8">
                                 <div class="input-group mb-3">
-                                    <input type="file" class="form-control <?= isset($errors['foto']) ? 'is-invalid' : ''; ?>" style="border: 1px solid black;" id="foto" name="foto" onchange="previewImg()">
+                                    <input type="file" class="form-control <?= isset($errors['foto']) ? 'is-invalid' : ''; ?>" <?= isset($errors['foto']) ? '' : 'style="border: 1px solid black;"'; ?> id="foto" name="foto" onchange="previewImg()">
                                     <?php if(isset($errors['foto'])) : ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['foto']; ?>
@@ -238,6 +238,20 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <script>
+      function previewImg() {
+        const sampul = document.querySelector('#foto');
+        const imgPreview = document.querySelector('.img-preview');
+
+        const fileSampul = new FileReader();
+        fileSampul.readAsDataURL(sampul.files[0]);
+
+        fileSampul.onload = function(e) {
+          imgPreview.src = e.target.result;
+        }
+      }
+    </script>
 </body>
 
 </html>

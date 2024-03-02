@@ -211,12 +211,12 @@
                                 <img src="../img/profil/<?= $data['foto']; ?>" class="img-preview" style="width: 70px;">
                             </div>
                             <div class="col-sm-8">
-                            <?php if($data['foto'] != "default.png") : ?>
+                                <?php if($data['foto'] != "default.png") : ?>
                                     <button type="button" class="btn btn-sm btn-outline-danger" id="delete" data-bs-toggle="modal" data-bs-target="#exampleModal">Hapus Foto</button>
                                 <?php endif; ?>
 
                                 <div class="input-group mb-3">
-                                    <input type="file" class="form-control <?= isset($errors['foto']) ? 'is-invalid' : ''; ?>" style="border: 1px solid black;" id="foto" name="foto" onchange="previewImg()">
+                                    <input type="file" class="form-control <?= isset($errors['foto']) ? 'is-invalid' : ''; ?>" <?= isset($errors['foto']) ? '' : 'style="border: 1px solid black;"'; ?> id="foto" name="foto" onchange="previewImg()">
                                     <?php if(isset($errors['foto'])) : ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['foto']; ?>
