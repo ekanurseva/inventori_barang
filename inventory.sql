@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 02 Mar 2024 pada 15.57
+-- Waktu pembuatan: 03 Mar 2024 pada 10.31
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.0.15
 
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `inventory`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `bahan_pemasok`
+--
+
+CREATE TABLE `bahan_pemasok` (
+  `idbahan` int(11) NOT NULL,
+  `idpemasok` int(11) NOT NULL,
+  `nama_bahan` varchar(100) NOT NULL,
+  `stok` int(11) NOT NULL,
+  `satuan` varchar(45) NOT NULL,
+  `harga` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `bahan_pemasok`
+--
+
+INSERT INTO `bahan_pemasok` (`idbahan`, `idpemasok`, `nama_bahan`, `stok`, `satuan`, `harga`) VALUES
+(1, 3, 'Bakso Tanpa Tepung', 32, 'Pack', 8000),
+(2, 3, 'Gula Pasir', 400, 'Kg', 5000);
 
 -- --------------------------------------------------------
 
@@ -85,6 +108,13 @@ INSERT INTO `user` (`iduser`, `username`, `password`, `nama`, `email`, `telepon`
 --
 
 --
+-- Indeks untuk tabel `bahan_pemasok`
+--
+ALTER TABLE `bahan_pemasok`
+  ADD PRIMARY KEY (`idbahan`),
+  ADD KEY `idpemasok` (`idpemasok`);
+
+--
 -- Indeks untuk tabel `barang`
 --
 ALTER TABLE `barang`
@@ -101,6 +131,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT untuk tabel `bahan_pemasok`
+--
+ALTER TABLE `bahan_pemasok`
+  MODIFY `idbahan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT untuk tabel `barang`
 --
 ALTER TABLE `barang`
@@ -111,6 +147,16 @@ ALTER TABLE `barang`
 --
 ALTER TABLE `user`
   MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `bahan_pemasok`
+--
+ALTER TABLE `bahan_pemasok`
+  ADD CONSTRAINT `bahan_pemasok_ibfk_1` FOREIGN KEY (`idpemasok`) REFERENCES `user` (`iduser`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

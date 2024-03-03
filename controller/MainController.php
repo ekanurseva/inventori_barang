@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     $conn = mysqli_connect("localhost","root","","inventory");
 
     if (mysqli_connect_errno()){
@@ -79,7 +80,6 @@
 
     }
 
-    
     function validasi() {
         $result = cari_user();
         

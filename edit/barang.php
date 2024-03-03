@@ -1,5 +1,4 @@
 <?php 
-    session_start();
     require_once '../controller/BarangController.php';
 
     if(isset($_GET['id'])) {

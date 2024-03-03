@@ -1,3 +1,8 @@
+<?php 
+    require_once '../controller/BahanPemasokController.php';
+    validasi_pemasok();
+?>
+
 <html lang="en">
 
 <head>

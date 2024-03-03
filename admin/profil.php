@@ -1,5 +1,4 @@
 <?php 
-    session_start();
     require_once '../controller/UserController.php';
 
     if(isset($_POST['submit'])) {
@@ -71,13 +70,13 @@
                     <?php if(isset($_SESSION['berhasil'])) : ?>
                         <div class="my-3">
                             <div class="alert alert-success" role="alert">
-                                <?= $_SESSION['berhasil']; ?>
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
                             </div>
                         </div>
                     <?php elseif(isset($_SESSION['gagal'])) : ?>
                         <div class="my-3">
                             <div class="alert alert-danger" role="alert">
-                                <?= $_SESSION['gagal']; ?>
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
                             </div>
                         </div>
                     <?php endif; ?>

@@ -1,3 +1,49 @@
+<?php 
+    require_once '../controller/BahanPemasokController.php';
+
+    if(isset($_GET['id'])) {
+        $id = dekripsi($_GET['id']);
+
+        $data = query("SELECT * FROM bahan_pemasok WHERE idbahan = '$id'");
+
+        if(count($data) == 0) {
+            echo "<script>
+                    document.location.href='../pemasok/barang.php';
+                </script>";
+            exit;    
+        } else {
+            $data = $data[0];
+            
+            if(isset($_POST['submit'])) {
+                $errors = update($_POST);
+
+                if(is_numeric($errors)) {
+                    if($errors > 0) {
+                        $_SESSION["berhasil"] = "Data Bahan Baku Berhasil Diubah!";
+                        echo "
+                            <script>
+                                document.location.href='../pemasok/barang.php';
+                            </script>
+                        ";
+                    } else {
+                        $_SESSION["gagal"] = "Data Bahan Baku Gagal Diubah!";
+                        echo "
+                            <script>
+                                document.location.href='../pemasok/barang.php';
+                            </script>
+                        ";
+                    }
+                }
+            }
+        }
+    } else {
+        echo "<script>
+                document.location.href='../pemasok/barang.php';
+            </script>";
+        exit;
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -39,28 +85,51 @@
 
 
                     <form method="post" action="">
+                        <input type="hidden" name="idbahan" value="<?= $data['idbahan']; ?>">
+                        <input type="hidden" name="oldnama_bahan" value="<?= $data['nama_bahan']; ?>">
+
                         <div class="mb-3 mt-3 row ms-5">
-                            <label for="bahan" class="col-sm-2 me-0 col-form-label">Nama Barang :</label>
+                            <label for="nama_bahan" class="col-sm-2 me-0 col-form-label">Nama Barang :</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="bahan">
+                                <input type="text" class="form-control <?= isset($errors['nama_bahan']) ? 'is-invalid' : ''; ?>" id="nama_bahan" name="nama_bahan" value="<?= isset($_POST['nama_bahan']) ? $_POST['nama_bahan'] : $data['nama_bahan']; ?>">
+                                <?php if(isset($errors['nama_bahan'])) : ?>
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        <?= $errors['nama_bahan']; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="stok" class="col-sm-2 me-0 col-form-label">Stok :</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="stok">
+                                <input type="number" class="form-control <?= isset($errors['stok']) ? 'is-invalid' : ''; ?>" id="stok" name="stok" value="<?= isset($_POST['stok']) ? $_POST['stok'] : $data['stok']; ?>">
+                                <?php if(isset($errors['stok'])) : ?>
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        <?= $errors['stok']; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="satuan" class="col-sm-2 me-0 col-form-label">Satuan :</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="satuan">
+                                <input type="text" class="form-control <?= isset($errors['satuan']) ? 'is-invalid' : ''; ?>" id="satuan" name="satuan" value="<?= isset($_POST['satuan']) ? $_POST['satuan'] : $data['satuan']; ?>">
+                                <?php if(isset($errors['satuan'])) : ?>
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        <?= $errors['satuan']; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="harga" class="col-sm-2 me-0 col-form-label">Harga :</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="harga">
+                                <input type="number" class="form-control <?= isset($errors['harga']) ? 'is-invalid' : ''; ?>" id="harga" name="harga" value="<?= isset($_POST['harga']) ? $_POST['harga'] : $data['harga']; ?>">
+                                <?php if(isset($errors['harga'])) : ?>
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        <?= $errors['harga']; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -68,8 +137,8 @@
                         <div class="d-flex justify-content-end me-5">
                             <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
                                 href="../pemasok/barang.php">Kembali</a>
-                            <button type="button" class="btn btn-primary mt-3 px-4"
-                                style="border-radius: 15px;">Update</button>
+                            <button type="submit" class="btn btn-primary mt-3 px-4"
+                                style="border-radius: 15px;" name="submit">Update</button>
                         </div>
                     </form>
                 </div>
