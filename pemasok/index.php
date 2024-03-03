@@ -68,8 +68,8 @@
                             <div class="card bg-primary text-white col-3">
                                 <h6 class="card-header fw-bold">Update Profil</h6>
                                 <div class="card-body">
-                                    <h6 class="card-title text-center">Pemasok 1</h6>
-                                    <p class="card-text text-center">PT. Apa</p>
+                                    <h6 class="card-title text-center"><?= $user['nama']; ?></h6>
+                                    <p class="card-text text-center"><?= $user['instansi']; ?></p>
                                     <div class="text-center">
                                         <a class="btn btn-light btn-sm" href="../pemasok/profil.php">
                                             View

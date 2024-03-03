@@ -107,7 +107,7 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="password" class="col-sm-3 me-0 col-form-label">Password :</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control<?= isset($errors['password']) ? 'is-invalid' : ''; ?>" id="password" name="password" value="<?= isset($_POST['password']) ? $_POST['password'] : $user['password']; ?>">
+                                <input type="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : ''; ?>" id="password" name="password" value="<?= isset($_POST['password']) ? '' : $user['password']; ?>">
                                 <?php if(isset($errors['password'])) : ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['password']; ?>
@@ -119,7 +119,7 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="password2" class="col-sm-3 me-0 col-form-label">Konfirmasi Password :</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control " id="password2" name="password2" value="<?= $user['password']; ?>">
+                                <input type="password" class="form-control " id="password2" name="password2" value="<?= isset($_POST['password']) ? '' : $user['password']; ?>">
                             </div>
                         </div>
 
@@ -162,7 +162,7 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="alamat" class="col-sm-3 me-0 col-form-label">Alamat :</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control <?= isset($errors['alamat']) ? 'is-invalid' : ''; ?>" id="alamat" name="alamat" rows="2"><?= isset($_POST['alamat']) ? $_POST['alamat'] : $user['alamat']; ?></textarea>
+                                <textarea <?= isset($errors['alamat']) ? '' : 'style="border: 1px solid black;"'; ?> class="form-control <?= isset($errors['alamat']) ? 'is-invalid' : ''; ?>" id="alamat" name="alamat" rows="2"><?= isset($_POST['alamat']) ? $_POST['alamat'] : $user['alamat']; ?></textarea>
                                 <?php if(isset($errors['alamat'])) : ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['alamat']; ?>
