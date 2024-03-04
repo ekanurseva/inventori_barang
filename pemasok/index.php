@@ -1,6 +1,8 @@
 <?php 
     require_once '../controller/BahanPemasokController.php';
     validasi_pemasok();
+
+    $data_bahan = query("SELECT * FROM bahan_pemasok");
 ?>
 
 <html lang="en">
@@ -43,7 +45,7 @@
                                 <h6 class="card-header fw-bold">Data Barang</h6>
                                 <div class="card-body">
                                     <h6 class="card-title text-center">Jumlah Barang</h6>
-                                    <p class="card-text text-center">5</p>
+                                    <p class="card-text text-center"><?= count($data_bahan); ?></p>
                                     <div class="text-center">
                                         <a class="btn btn-light btn-sm" href="barang.php">
                                             View

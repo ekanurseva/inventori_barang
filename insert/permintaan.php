@@ -1,3 +1,61 @@
+<?php 
+    require_once '../controller/TransaksiPembelian.php';
+
+    if(isset($_GET['pemasok'])) {
+        $id = dekripsi($_GET['pemasok']);
+
+        $data_bahan = query("SELECT * FROM bahan_pemasok WHERE idpemasok = '$id'");
+
+        $kode_transaksi = "SIIB-" . time();
+            
+        if(isset($_POST['submit'])) {
+            $errors = create($_POST);
+
+            if(is_numeric($errors)) {
+                if($errors > 1) {
+                    $_SESSION["berhasil"] = "Transaksi Pembelian Berhasil Dibuat!";
+                    echo "
+                        <script>
+                            document.location.href='../admin/transaksi.php';
+                        </script>
+                    ";
+                } else {
+                    $_SESSION["gagal"] = "Transaksi Pembelian Gagal Dibuat!";
+                    echo "
+                        <script>
+                            document.location.href='../admin/transaksi.php';
+                        </script>
+                    ";
+                }
+            }
+        }
+
+        // if(isset($_POST['hapus_foto'])) {
+        //     if(delete_foto($_POST) > 0 ) {
+        //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
+        //         echo "
+        //             <script>
+        //                 document.location.href='../admin/barang.php';
+        //             </script>
+        //         ";
+        //     } else {
+        //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
+        //         echo "
+        //             <script>
+        //                 document.location.href='../admin/barang.php';
+        //             </script>
+        //         ";
+        //     }
+        // }
+        
+    } else {
+        echo "<script>
+                document.location.href='../admin/transaksi.php';
+            </script>";
+        exit;
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -42,8 +100,19 @@
                         </h5>
                     </div>
 
+                    <?php if(isset($errors['kosong'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $errors['kosong']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
 
                     <form method="post" action="" class="mx-5">
+                        <input type="hidden" name="idpemasok" value="<?= $id; ?>">
+                        <input type="hidden" name="kode_transaksi" value="<?= $kode_transaksi; ?>">
+
                         <div class="mb-2 mt-4 row">
                             <div class="col-4 mb-3">
                                 <label class="fw-bold fs-5">Nama Barang :</label>
@@ -56,23 +125,30 @@
                             </div>
                         </div>
 
-                        <div class="mb-2 row">
-                            <div class="col-4 mb-3">
-                                <label class="fw-bold">Tepung</label>
+                        <?php foreach($data_bahan as $bahan) : ?>
+                            <div class="mb-2 row">
+                                <div class="col-4 mb-3">
+                                    <label class="fw-bold"><?= $bahan['nama_bahan']; ?></label>
+                                </div>
+                                <div class="col-4 mb-3">
+                                    <label class="fw-bold">Rp <?= number_format($bahan['harga'], 0, ',', '.'); ?></label>
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <input type="number" class="form-control <?= isset($errors['bahan_' . $bahan['idbahan']]) ? 'is-invalid' : ''; ?>" placeholder="masukkan jumlah" name="bahan_<?= $bahan['idbahan'] ?>" value="<?= isset($_POST['bahan_' . $bahan['idbahan']]) ? $_POST['bahan_' . $bahan['idbahan']] : '0'; ?>">
+                                    <?php if(isset($errors['bahan_' . $bahan['idbahan']])) : ?>
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            <?= $errors['bahan_' . $bahan['idbahan']]; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                            <div class="col-4 mb-3">
-                                <label class="fw-bold">Rp 5.000</label>
-                            </div>
-                            <div class="col-3 mb-3">
-                                <input type="text" class="form-control" placeholder="masukkan jumlah">
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
 
                         <div class="d-flex justify-content-end me-5 mt-5">
                             <a class="btn btn-secondary px-4 me-3" style="border-radius: 15px;"
                                 href="../admin/transaksi.php">Kembali</a>
-                            <button type="button" class="btn btn-primary px-4"
-                                style="border-radius: 15px;">Submit</button>
+                            <button type="submit" class="btn btn-primary px-4"
+                                style="border-radius: 15px;" name="submit">Submit</button>
                         </div>
                     </form>
                 </div>

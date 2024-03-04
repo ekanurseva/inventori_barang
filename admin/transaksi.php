@@ -1,3 +1,10 @@
+<?php 
+    require_once '../controller/TransaksiPembelian.php';
+
+    $data_pemasok = query("SELECT * FROM user WHERE level = 'Pemasok'");
+    $data_transaksi = query("SELECT * FROM transaksi_pembelian");
+?>
+
 <html lang="en">
 
 <head>
@@ -48,6 +55,20 @@
                         </button>
                     </div>
 
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="mt-4">
                         <table id="example" class="table table-hover text-center">
                             <thead>
@@ -92,7 +113,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <form action="../insert/permintaan.php" method="post">
+                        <form action="../insert/permintaan.php" method="get">
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="kriteria" class="form-label">Pilih Pemasok Untuk Melakukan
@@ -101,9 +122,10 @@
                                     <div class="">
                                         <select id="kriteria" class="form-select" style="border: 1px solid black;"
                                             aria-label="Default select example" name="pemasok">
-                                            <option value="pemasok">
-                                                Pemasok 1
-                                            </option>
+                                            <option value="" selected hidden>--Pilih Pemasok--</option>
+                                            <?php foreach($data_pemasok as $pemasok) : ?>
+                                                <option value="<?= enkripsi($pemasok['iduser']); ?>"><?= $pemasok['nama']; ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -139,3 +161,11 @@
 </body>
 
 </html>
+
+<?php 
+    if(!isset($_POST['iduser'])) {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>
