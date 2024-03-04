@@ -1,3 +1,9 @@
+<?php 
+    require_once '../controller/TransaksiPembelian.php';
+
+    $data_transaksi = query("SELECT * FROM transaksi_pembelian");
+?>
+
 <html lang="en">
 
 <head>
@@ -46,6 +52,7 @@
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Pemasok</th>
                                     <th class="text-center" scope="col">Nomor Bukti</th>
                                     <th class="text-center" scope="col">Tanggal Masuk</th>
@@ -54,25 +61,45 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        Pemasok 1
-                                    </td>
-                                    <td>
-                                        A-0001
-                                    </td>
-                                    <td>
-                                        12-12-2023 | 10:12:05
-                                    </td>
-                                    <td>
-                                        Diterima
-                                    </td>
-                                    <td>
-                                        <a href="../admin/detail_barang_masuk.php" class="btn btn-sm btn-primary">
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($data_transaksi as $transaksi) :
+                                        $idpemasok = $transaksi['idpemasok'];
+                                        $pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
+
+                                        $idtransaksi = $transaksi['idtransaksi'];
+                                        $barang_masuk = query("SELECT no_bukti FROM barang_masuk WHERE idtransaksi = $idtransaksi");
+                                ?>  
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $pemasok['nama']; ?>
+                                        </td>
+                                        <td>
+                                            <?php if($barang_masuk[0]['no_bukti'] == NULL)  : ?>
+                                                -
+                                            <?php else : ?>
+                                                <?= $transaksi['kode_transaksi']; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?>
+                                        </td>
+                                        <td>
+                                            <?= $transaksi['status']; ?>
+                                        </td>
+                                        <td>
+                                            <a href="../admin/detail_barang_masuk.php?id=<?= enkripsi($idtransaksi); ?>" class="btn btn-sm btn-primary">
+                                                Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>

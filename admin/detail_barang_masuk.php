@@ -1,3 +1,71 @@
+<?php 
+    require_once '../controller/TransaksiPembelian.php';
+
+    if(isset($_GET['id'])) {
+        $id = dekripsi($_GET['id']);
+
+        $transaksi = query("SELECT * FROM transaksi_pembelian WHERE idtransaksi = '$id'");
+        
+        if(count($transaksi) == 0) {
+            echo "<script>
+            document.location.href='transaksi.php';
+            </script>";
+            exit;    
+        } else {
+            $transaksi = $transaksi[0];
+            $data_barang = query("SELECT * FROM barang_masuk WHERE idtransaksi = '$id'");
+
+            $idpemasok = $transaksi['idpemasok'];
+            $nama_pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
+            
+            // if(isset($_POST['submit'])) {
+            //     $errors = update($_POST);
+
+            //     if(is_numeric($errors)) {
+            //         if($errors > 0) {
+            //             $_SESSION["berhasil"] = "Data User Berhasil Diubah!";
+            //             echo "
+            //                 <script>
+            //                     document.location.href='../admin/user.php';
+            //                 </script>
+            //             ";
+            //         } else {
+            //             $_SESSION["gagal"] = "Data User Gagal Diubah!";
+            //             echo "
+            //                 <script>
+            //                     document.location.href='../admin/user.php';
+            //                 </script>
+            //             ";
+            //         }
+            //     }
+            // }
+
+            // if(isset($_POST['hapus_foto'])) {
+            //     if(delete_foto($_POST) > 0 ) {
+            //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
+            //         echo "
+            //             <script>
+            //                 document.location.href='../admin/user.php';
+            //             </script>
+            //         ";
+            //     } else {
+            //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
+            //         echo "
+            //             <script>
+            //                 document.location.href='../admin/user.php';
+            //             </script>
+            //         ";
+            //     }
+            // }
+        }
+    } else {
+        echo "<script>
+                document.location.href='transaksi.php';
+            </script>";
+        exit;
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -38,7 +106,7 @@
                 <div class="contents px-3 py-3 mx-3">
                     <div class="box1">
                         <h5 class="text-dark mb-0 ms-4 text-center fw-bold">
-                            Detail Transaksi Permintaan Barang
+                            Detail Barang Masuk
                         </h5>
                     </div>
 
@@ -48,18 +116,22 @@
                                 <a href="../admin/barang_masuk.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
                             </div>
                             <div class="col-10">
-                                <h6>Nama Pemasok : <b>Pemasok 1</b></h6>
+                                <h6>Nama Pemasok : <b><?= $nama_pemasok['nama']; ?></b></h6>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-sm-4">
-                                Status : <b>Selesai</b>
+                                Status : <b><?= $transaksi['status']; ?></b>
                             </div>
                             <div class="col-sm-4">
-                                <h6>S001001</h6>
+                                <?php if($data_barang[0]['no_bukti'] == NULL) :?>
+                                    <h6>-</h6>
+                                <?php else : ?>
+                                    <h6><?= $data_barang[0]['no_bukti']; ?></h6>
+                                <?php endif; ?>
                             </div>
                             <div class="col-sm-4">
-                                <h6>12-12-2023 | 10:12:05</h6>
+                                <h6><?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?></h6>
                             </div>
                         </div>
                     </div>
@@ -68,28 +140,45 @@
                         <table class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Barang Pesanan</th>
                                     <th class="text-center" scope="col">Jumlah</th>
                                     <th class="text-center" scope="col">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php 
+                                    $i = 1;
+                                    $total = 0;
+                                    foreach($data_barang as $barang) :
+                                        $idbarang = $barang['idbahan'];
+                                        $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = $idbarang")[0];
+
+                                        $harga = $bahan['harga'] * $barang['qty'];
+                                        $total += $harga;
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $bahan['nama_bahan']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $barang['qty']; ?>
+                                        </td>
+                                        <td>
+                                            Rp <?= number_format($harga, 0, ',', '.'); ?>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                                 <tr>
-                                    <td>
-                                        Tepung
-                                    </td>
-                                    <td>
-                                        2
-                                    </td>
-                                    <td>
-                                        Rp 100.000
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <th>Total Pembayaran</th>
+                                    <th colspan="3">Total Pembayaran</th>
                                     <th>
-                                        Rp 100.000
+                                        Rp <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
                                 </tr>
                             </tbody>

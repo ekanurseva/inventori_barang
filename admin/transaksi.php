@@ -73,6 +73,7 @@
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Pemasok</th>
                                     <th class="text-center" scope="col">Tanggal Transaksi</th>
                                     <th class="text-center" scope="col">Status</th>
@@ -80,22 +81,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        Pemasok 1
-                                    </td>
-                                    <td>
-                                        12-12-2023 10:12:05
-                                    </td>
-                                    <td>
-                                        Belum Diproses
-                                    </td>
-                                    <td>
-                                        <a href="../admin/detail_transaksi.php" class="btn btn-sm btn-primary">
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($data_transaksi as $transaksi) :
+                                        $idpemasok = $transaksi['idpemasok'];
+                                        $pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
+                                ?>  
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $pemasok['nama']; ?>
+                                        </td>
+                                        <td>
+                                            <?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?>
+                                        </td>
+                                        <td>
+                                            <?= $transaksi['status']; ?>
+                                        </td>
+                                        <td>
+                                            <a href="../admin/detail_transaksi.php?id=<?= enkripsi($transaksi['idtransaksi']); ?>" class="btn btn-sm btn-primary">
+                                                Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>

@@ -40,7 +40,7 @@
             $berhasil = 0;
 
             try {
-                mysqli_query($conn, "INSERT INTO transaksi_pembelian VALUES (NULL, CURRENT_TIMESTAMP(), '$kode_transaksi', '$idpemasok')");
+                mysqli_query($conn, "INSERT INTO transaksi_pembelian VALUES (NULL, CURRENT_TIMESTAMP(), '$kode_transaksi', 'Belum Diproses', '$idpemasok')");
 
                 $berhasil++;
             } catch (\Throwable $th) {
@@ -56,9 +56,12 @@
                 $qty = $data[$kode_input];
                 $idbahan = $bahan['idbahan'];
 
+                $stok = $bahan['stok'] - $qty;
+
                 if($qty != 0) {
                     try {
-                        mysqli_query($conn, "INSERT INTO barang_masuk VALUES (NULL, NULL, NULL, NULL, '$qty', 'Belum Diproses', '$idtransaksi', '$idbahan')");
+                        mysqli_query($conn, "INSERT INTO barang_masuk VALUES (NULL, NULL, NULL, NULL, '$qty', '$idtransaksi', '$idbahan')");
+                        mysqli_query($conn, "UPDATE bahan_pemasok SET stok = '$stok' WHERE idbahan = '$idbahan'");
                         $berhasil++;
                     } catch (\Throwable $th) {
                         

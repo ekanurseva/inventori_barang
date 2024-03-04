@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 04 Mar 2024 pada 15.18
+-- Waktu pembuatan: 04 Mar 2024 pada 16.59
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `bahan_pemasok` (
 --
 
 INSERT INTO `bahan_pemasok` (`idbahan`, `idpemasok`, `nama_bahan`, `stok`, `satuan`, `harga`) VALUES
-(1, 3, 'Bakso Tanpa Tepung', 32, 'Pack', 8000),
+(1, 3, 'Bakso Tanpa Tepung', 30, 'Pack', 8000),
 (2, 3, 'Gula Pasir', 400, 'Kg', 5000),
 (3, 3, 'Biji Selasih', 421, 'Pack', 1500);
 
@@ -84,7 +84,6 @@ CREATE TABLE `barang_masuk` (
   `tgl_masuk` timestamp NULL DEFAULT NULL,
   `keterangan` text DEFAULT NULL,
   `qty` int(20) NOT NULL,
-  `status` varchar(45) NOT NULL,
   `idtransaksi` int(11) NOT NULL,
   `idbahan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -93,10 +92,11 @@ CREATE TABLE `barang_masuk` (
 -- Dumping data untuk tabel `barang_masuk`
 --
 
-INSERT INTO `barang_masuk` (`idmasuk`, `no_bukti`, `tgl_masuk`, `keterangan`, `qty`, `status`, `idtransaksi`, `idbahan`) VALUES
-(1, NULL, NULL, NULL, 2, 'Belum Diproses', 1, 1),
-(2, NULL, NULL, NULL, 2, 'Belum Diproses', 1, 2),
-(3, NULL, NULL, NULL, 1, 'Belum Diproses', 1, 3);
+INSERT INTO `barang_masuk` (`idmasuk`, `no_bukti`, `tgl_masuk`, `keterangan`, `qty`, `idtransaksi`, `idbahan`) VALUES
+(1, NULL, NULL, NULL, 2, 1, 1),
+(2, NULL, NULL, NULL, 2, 1, 2),
+(3, NULL, NULL, NULL, 1, 1, 3),
+(4, NULL, NULL, NULL, 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -108,6 +108,7 @@ CREATE TABLE `transaksi_pembelian` (
   `idtransaksi` int(11) NOT NULL,
   `tgl_transaksi` timestamp NOT NULL DEFAULT current_timestamp(),
   `kode_transaksi` varchar(50) NOT NULL,
+  `status` varchar(45) NOT NULL,
   `idpemasok` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -115,8 +116,9 @@ CREATE TABLE `transaksi_pembelian` (
 -- Dumping data untuk tabel `transaksi_pembelian`
 --
 
-INSERT INTO `transaksi_pembelian` (`idtransaksi`, `tgl_transaksi`, `kode_transaksi`, `idpemasok`) VALUES
-(1, '2024-03-04 14:11:12', 'SIIB-1709561457', 3);
+INSERT INTO `transaksi_pembelian` (`idtransaksi`, `tgl_transaksi`, `kode_transaksi`, `status`, `idpemasok`) VALUES
+(1, '2024-03-04 14:11:12', 'SIIB-1709561457', 'Belum Diproses', 3),
+(2, '2024-03-04 14:28:06', 'SIIB-1709562475', 'Belum Diproses', 3);
 
 -- --------------------------------------------------------
 
@@ -208,13 +210,13 @@ ALTER TABLE `barang`
 -- AUTO_INCREMENT untuk tabel `barang_masuk`
 --
 ALTER TABLE `barang_masuk`
-  MODIFY `idmasuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idmasuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi_pembelian`
 --
 ALTER TABLE `transaksi_pembelian`
-  MODIFY `idtransaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idtransaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`

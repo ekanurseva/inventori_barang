@@ -1,3 +1,12 @@
+<?php 
+    require_once '../controller/BahanPemasokController.php';
+    validasi_pemasok();
+    $user = cari_user();
+
+    $iduser = $user['iduser'];
+    $data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE idpemasok = $iduser");
+?>
+
 <html lang="en">
 
 <head>
@@ -45,33 +54,47 @@
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Nomor Bukti</th>
-                                    <th class="text-center" scope="col">Pelanggan</th>
                                     <th class="text-center" scope="col">Tanggal Transaksi</th>
                                     <th class="text-center" scope="col">Status</th>
                                     <th class="text-center" scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        S001001
-                                    </td>
-                                    <td>
-                                        Eka Nurseva
-                                    </td>
-                                    <td>
-                                        12-12-2023 10:12:05
-                                    </td>
-                                    <td>
-                                        Belum Diproses
-                                    </td>
-                                    <td>
-                                        <a href="../pemasok/detail.php" class="btn btn-sm btn-primary">
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($data_transaksi as $transaksi) :
+                                        $idtransaksi = $transaksi['idtransaksi'];
+                                        $no_bukti = query("SELECT no_bukti FROM barang_masuk WHERE idtransaksi = $idtransaksi")[0];
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?php if($no_bukti['no_bukti'] == NULL) : ?>
+                                                -
+                                            <?php else : ?>
+                                                <?= $no_bukti['no_bukti']; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?>
+                                        </td>
+                                        <td>
+                                            <?= $transaksi['status']; ?>
+                                        </td>
+                                        <td>
+                                            <a href="../pemasok/detail.php?id=<?= enkripsi($idtransaksi); ?>" class="btn btn-sm btn-primary">
+                                                Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>

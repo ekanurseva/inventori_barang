@@ -3,6 +3,10 @@
     validasi_pemasok();
 
     $data_bahan = query("SELECT * FROM bahan_pemasok");
+    $user = cari_user();
+
+    $iduser = $user['iduser'];
+    $data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE idpemasok = $iduser");
 ?>
 
 <html lang="en">
@@ -58,7 +62,7 @@
                                 <h6 class="card-header fw-bold">Data Transaksi</h6>
                                 <div class="card-body">
                                     <h6 class="card-title text-center">Jumlah Transaksi</h6>
-                                    <p class="card-text text-center">5</p>
+                                    <p class="card-text text-center"><?= count($data_transaksi); ?></p>
                                     <div class="text-center">
                                         <a class="btn btn-light btn-sm" href="../pemasok/pesanan.php">
                                             View
