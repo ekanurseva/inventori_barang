@@ -72,4 +72,15 @@
             return $berhasil;
         }
     }
+
+    function update_status($data) {
+        global $conn;
+
+        $idtransaksi = $data['idtransaksi'];
+        $status = $data['status'];
+
+        mysqli_query($conn, "UPDATE transaksi_pembelian SET status = '$status' WHERE idtransaksi = '$idtransaksi'");
+
+        return mysqli_affected_rows($conn);
+    }
 ?>

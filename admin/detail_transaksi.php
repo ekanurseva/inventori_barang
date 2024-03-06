@@ -132,9 +132,11 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../insert/permintaan.php">Tambah Permintaan</a>
-                    </div>
+                    <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                        <div class="mt-4 ">
+                            <a class="btn btn-primary" href="../insert/permintaan.php">Tambah Permintaan</a>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="mt-4">
                         <table class="table table-hover text-center">
@@ -144,7 +146,9 @@
                                     <th class="text-center" scope="col">Barang Pesanan</th>
                                     <th class="text-center" scope="col">Jumlah</th>
                                     <th class="text-center" scope="col">Total</th>
-                                    <th class="text-center" scope="col">Aksi</th>
+                                    <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                        <th class="text-center" scope="col">Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -171,15 +175,17 @@
                                         <td>
                                             Rp <?= number_format($harga, 0, ',', '.'); ?>
                                         </td>
-                                        <td>
-                                            <a href="../edit/permintaan.php" class="btn btn-sm btn-primary">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                            |
-                                            <button type="button" class="btn btn-danger btn-sm" id="delete">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        </td>
+                                        <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                            <td>
+                                                <a href="../edit/permintaan.php" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                                |
+                                                <button type="button" class="btn btn-danger btn-sm" id="delete">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php 
                                     $i++;
@@ -190,7 +196,9 @@
                                     <th>
                                         Rp <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
-                                    <td></td>
+                                    <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                        <td></td>
+                                    <?php endif; ?>
                                 </tr>
                             </tbody>
                         </table>

@@ -40,23 +40,14 @@
             //     }
             // }
 
-            // if(isset($_POST['hapus_foto'])) {
-            //     if(delete_foto($_POST) > 0 ) {
-            //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/user.php';
-            //             </script>
-            //         ";
-            //     } else {
-            //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/user.php';
-            //             </script>
-            //         ";
-            //     }
-            // }
+            if(isset($_POST['status_pesanan'])) {
+                if(update_status($_POST) > 0 ) {
+                    $_SESSION["berhasil"] = "Status Berhasil Diubah!";
+                } else {
+                    $_SESSION["gagal"] = "Status Gagal Diubah!";
+                }
+                header("Refresh:0");
+            }
         }
     } else {
         echo "<script>
@@ -105,6 +96,20 @@
                         </h5>
                     </div>
 
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="text-center mt-4">
                         <div class="row">
                             <div class="col-1">
@@ -147,7 +152,9 @@
                                     <th class="text-center" scope="col">Barang Pesanan</th>
                                     <th class="text-center" scope="col">Jumlah</th>
                                     <th class="text-center" scope="col">Total</th>
-                                    <th class="text-center" scope="col">Aksi</th>
+                                    <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                        <th class="text-center" scope="col">Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -174,15 +181,17 @@
                                         <td>
                                             Rp <?= number_format($harga, 0, ',', '.'); ?>
                                         </td>
-                                        <td>
-                                            <a href="../edit/pesanan.php" class="btn btn-sm btn-primary">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                            |
-                                            <button type="button" class="btn btn-danger btn-sm" id="delete">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        </td>
+                                        <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                            <td>
+                                                <a href="../edit/pesanan.php" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                                |
+                                                <button type="button" class="btn btn-danger btn-sm" id="delete">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php 
                                     $i++;
@@ -193,7 +202,9 @@
                                     <th>
                                         Rp <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
-                                    <td></td>
+                                    <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                        <td></td>
+                                    <?php endif; ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -212,13 +223,13 @@
                                     aria-label="Close"></button>
                             </div>
                             <form action="" method="post">
+                                <input type="hidden" name="idtransaksi" value="<?= $transaksi['idtransaksi']; ?>">
                                 <div class="modal-body">
                                     <label for="status" class="form-label">Pilih status pemesanan</label>
                                     <select class="form-select" aria-label="Default select example" name="status">
-                                        <option selected hidden value="Selesai">Belum Diproses</option>
-                                        <option value="Belum Diproses">Belum Diproses</option>
-                                        <option value="Diproses">Diproses</option>
-                                        <option value="Selesai">Selesai</option>
+                                        <option value="Belum Diproses" <?= $transaksi['status'] == "Belum Diproses" ? 'selected' : ''; ?>>Belum Diproses</option>
+                                        <option value="Diproses" <?= $transaksi['status'] == "Diproses" ? 'selected' : ''; ?>>Diproses</option>
+                                        <option value="Selesai" <?= $transaksi['status'] == "Selesai" ? 'selected' : ''; ?>>Selesai</option>
                                     </select>
                                 </div>
 
@@ -249,3 +260,11 @@
 </body>
 
 </html>
+
+<?php 
+    if(!isset($_POST['status_pesanan'])) {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>
