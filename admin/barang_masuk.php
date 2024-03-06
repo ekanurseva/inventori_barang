@@ -68,7 +68,7 @@
                                         $pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
 
                                         $idtransaksi = $transaksi['idtransaksi'];
-                                        $barang_masuk = query("SELECT no_bukti FROM barang_masuk WHERE idtransaksi = $idtransaksi");
+                                        $barang_masuk = query("SELECT no_bukti, tgl_masuk FROM barang_masuk WHERE idtransaksi = $idtransaksi");
                                 ?>  
                                     <tr>
                                         <td>
@@ -85,7 +85,11 @@
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?>
+                                            <?php if($barang_masuk[0]['tgl_masuk'] == NULL)  : ?>
+                                                -
+                                            <?php else : ?>
+                                                <?= date("d-m-Y | H:i:s", strtotime($barang_masuk[0]['tgl_masuk'])); ?>
+                                            <?php endif; ?>
                                         </td>
                                         <td>
                                             <?= $transaksi['status']; ?>

@@ -131,7 +131,11 @@
                                 <?php endif; ?>
                             </div>
                             <div class="col-sm-4">
-                                <h6><?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?></h6>
+                                <?php if($data_barang[0]['tgl_masuk'] == NULL) :?>
+                                    <h6>-</h6>
+                                <?php else : ?>
+                                    <h6><?= date("d-m-Y | H:i:s", strtotime($data_barang[0]['tgl_masuk'])); ?></h6>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

@@ -13,12 +13,21 @@
 
             if(is_numeric($errors)) {
                 if($errors > 1) {
-                    $_SESSION["berhasil"] = "Transaksi Pembelian Berhasil Dibuat!";
-                    echo "
-                        <script>
-                            document.location.href='../admin/transaksi.php';
-                        </script>
-                    ";
+                    if(isset($_GET['dari'])) {
+                        $_SESSION["berhasil"] = "Transaksi Pembelian Berhasil Ditambahkan!";
+                        echo "
+                            <script>
+                                document.location.href='../admin/detail_transaksi.php?id=" . $_GET['dari'] . "';
+                            </script>
+                        ";
+                    } else {
+                        $_SESSION["berhasil"] = "Transaksi Pembelian Berhasil Dibuat!";
+                        echo "
+                            <script>
+                                document.location.href='../admin/transaksi.php';
+                            </script>
+                        ";
+                    }
                 } else {
                     $_SESSION["gagal"] = "Transaksi Pembelian Gagal Dibuat!";
                     echo "
@@ -29,25 +38,6 @@
                 }
             }
         }
-
-        // if(isset($_POST['hapus_foto'])) {
-        //     if(delete_foto($_POST) > 0 ) {
-        //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-        //         echo "
-        //             <script>
-        //                 document.location.href='../admin/barang.php';
-        //             </script>
-        //         ";
-        //     } else {
-        //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-        //         echo "
-        //             <script>
-        //                 document.location.href='../admin/barang.php';
-        //             </script>
-        //         ";
-        //     }
-        // }
-        
     } else {
         echo "<script>
                 document.location.href='../admin/transaksi.php';
@@ -112,6 +102,7 @@
                     <form method="post" action="" class="mx-5">
                         <input type="hidden" name="idpemasok" value="<?= $id; ?>">
                         <input type="hidden" name="kode_transaksi" value="<?= $kode_transaksi; ?>">
+                        <input type="hidden" name="dari" value="<?= isset($_GET['dari']) ? $_GET['dari'] : ''; ?>">
 
                         <div class="mb-2 mt-4 row">
                             <div class="col-4 mb-3">
@@ -145,8 +136,13 @@
                         <?php endforeach; ?>
 
                         <div class="d-flex justify-content-end me-5 mt-5">
-                            <a class="btn btn-secondary px-4 me-3" style="border-radius: 15px;"
-                                href="../admin/transaksi.php">Kembali</a>
+                            <?php if(isset($_GET['dari'])) : ?>
+                                <a class="btn btn-secondary px-4 me-3" style="border-radius: 15px;"
+                                    href="../admin/detail_transaksi.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php else : ?>
+                                <a class="btn btn-secondary px-4 me-3" style="border-radius: 15px;"
+                                    href="../admin/transaksi.php">Kembali</a>
+                            <?php endif; ?>
                             <button type="submit" class="btn btn-primary px-4"
                                 style="border-radius: 15px;" name="submit">Submit</button>
                         </div>

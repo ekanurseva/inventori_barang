@@ -37,18 +37,26 @@
         } else {
             $kode_transaksi = $data['kode_transaksi'];
             $idpemasok = $data['idpemasok'];
+            $dari = $data['dari'];
+
             $berhasil = 0;
 
-            try {
-                mysqli_query($conn, "INSERT INTO transaksi_pembelian VALUES (NULL, CURRENT_TIMESTAMP(), '$kode_transaksi', 'Belum Diproses', '$idpemasok')");
-
+            if($dari != "") {
+                $id = dekripsi($dari);
+                $data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE idtransaksi = '$id'")[0];
                 $berhasil++;
-            } catch (\Throwable $th) {
-
+            } else {
+                try {
+                    mysqli_query($conn, "INSERT INTO transaksi_pembelian VALUES (NULL, CURRENT_TIMESTAMP(), '$kode_transaksi', 'Belum Diproses', '$idpemasok')");
+    
+                    $berhasil++;
+                } catch (\Throwable $th) {
+    
+                }
+    
+                $data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE kode_transaksi = '$kode_transaksi'")[0];
             }
-
             $data_bahan = query("SELECT * FROM bahan_pemasok WHERE idpemasok = '$idpemasok'");
-            $data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE kode_transaksi = '$kode_transaksi'")[0];
             $idtransaksi = $data_transaksi['idtransaksi'];
 
             foreach($data_bahan as $bahan) {
@@ -59,12 +67,25 @@
                 $stok = $bahan['stok'] - $qty;
 
                 if($qty != 0) {
-                    try {
-                        mysqli_query($conn, "INSERT INTO barang_masuk VALUES (NULL, NULL, NULL, NULL, '$qty', '$idtransaksi', '$idbahan')");
-                        mysqli_query($conn, "UPDATE bahan_pemasok SET stok = '$stok' WHERE idbahan = '$idbahan'");
-                        $berhasil++;
-                    } catch (\Throwable $th) {
-                        
+                    $cek_data = query("SELECT * FROM barang_masuk WHERE idtransaksi = '$idtransaksi' AND idbahan = '$idbahan'");
+
+                    if(count($cek_data) > 0) {
+                        $stok_akhir = $cek_data[0]['qty'] + $qty;
+                        try {
+                            mysqli_query($conn, "UPDATE barang_masuk SET qty = '$stok_akhir' WHERE idtransaksi = '$idtransaksi' AND idbahan = '$idbahan'");
+                            mysqli_query($conn, "UPDATE bahan_pemasok SET stok = '$stok' WHERE idbahan = '$idbahan'");
+                            $berhasil++;
+                        } catch (\Throwable $th) {
+                            
+                        }
+                    } else {
+                        try {
+                            mysqli_query($conn, "INSERT INTO barang_masuk VALUES (NULL, NULL, NULL, NULL, '$qty', '$idtransaksi', '$idbahan')");
+                            mysqli_query($conn, "UPDATE bahan_pemasok SET stok = '$stok' WHERE idbahan = '$idbahan'");
+                            $berhasil++;
+                        } catch (\Throwable $th) {
+                            
+                        }
                     }
                 } 
             }
@@ -79,8 +100,21 @@
         $idtransaksi = $data['idtransaksi'];
         $status = $data['status'];
 
-        mysqli_query($conn, "UPDATE transaksi_pembelian SET status = '$status' WHERE idtransaksi = '$idtransaksi'");
+        if($status == "Selesai") {
+            $transaksi = query("SELECT * FROM transaksi_pembelian WHERE idtransaksi = '$idtransaksi'")[0];
+            $no_bukti = $transaksi['kode_transaksi'];
+            try {
+                mysqli_query($conn, "UPDATE transaksi_pembelian SET status = '$status' WHERE idtransaksi = '$idtransaksi'");
+                mysqli_query($conn, "UPDATE barang_masuk SET no_bukti = '$no_bukti', tgl_masuk = CURRENT_TIMESTAMP() WHERE idtransaksi = '$idtransaksi'");
 
-        return mysqli_affected_rows($conn);
+                return 1;
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        } else {
+            mysqli_query($conn, "UPDATE transaksi_pembelian SET status = '$status' WHERE idtransaksi = '$idtransaksi'");
+            return mysqli_affected_rows($conn);
+        }
+
     }
 ?>

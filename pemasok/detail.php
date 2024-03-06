@@ -227,9 +227,13 @@
                                 <div class="modal-body">
                                     <label for="status" class="form-label">Pilih status pemesanan</label>
                                     <select class="form-select" aria-label="Default select example" name="status">
-                                        <option value="Belum Diproses" <?= $transaksi['status'] == "Belum Diproses" ? 'selected' : ''; ?>>Belum Diproses</option>
-                                        <option value="Diproses" <?= $transaksi['status'] == "Diproses" ? 'selected' : ''; ?>>Diproses</option>
-                                        <option value="Selesai" <?= $transaksi['status'] == "Selesai" ? 'selected' : ''; ?>>Selesai</option>
+                                        <?php if($transaksi['status'] == "Belum Diproses")  :?>
+                                            <option value="Diproses" <?= $transaksi['status'] == "Diproses" ? 'selected' : ''; ?>>Diproses</option>
+                                        <?php elseif($transaksi['status'] == "Diproses")  : ?>
+                                            <option value="Belum Diproses" <?= $transaksi['status'] == "Belum Diproses" ? 'selected' : ''; ?>>Belum Diproses</option>
+                                            <option value="Diproses" <?= $transaksi['status'] == "Diproses" ? 'selected' : ''; ?>>Diproses</option>
+                                            <option value="Selesai" <?= $transaksi['status'] == "Selesai" ? 'selected' : ''; ?>>Selesai</option>
+                                        <?php endif; ?>
                                     </select>
                                 </div>
 

@@ -110,6 +110,20 @@
                         </h5>
                     </div>
 
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="text-center mt-4">
                         <div class="row">
                             <div class="col-1">
@@ -134,7 +148,7 @@
 
                     <?php if($transaksi['status'] == "Belum Diproses") : ?>
                         <div class="mt-4 ">
-                            <a class="btn btn-primary" href="../insert/permintaan.php">Tambah Permintaan</a>
+                            <a class="btn btn-primary" href="../insert/permintaan.php?pemasok=<?= enkripsi($transaksi['idpemasok']); ?>&dari=<?= $_GET['id']; ?>">Tambah Permintaan</a>
                         </div>
                     <?php endif; ?>
 
@@ -222,3 +236,11 @@
 </body>
 
 </html>
+
+<?php 
+    if(!isset($_POST['iduser'])) {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>
