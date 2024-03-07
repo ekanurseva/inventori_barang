@@ -117,4 +117,81 @@
         }
 
     }
+
+    function update($data) {
+        global $conn;
+
+        $errors = [];
+
+        $idmasuk = $data['idmasuk'];
+        $idbahan = $data['idbahan'];
+        $oldqty = $data['oldqty'];
+        $qty = htmlspecialchars($data['qty']);
+
+        $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = '$idbahan'")[0];
+        $oldstok = $oldqty + $bahan['stok'];
+
+        $berhasil = 0;
+
+        if($qty == 0) {
+            $errors['qty'];
+        } elseif($qty > $oldstok) {
+            $errors['qty'] = "Bahan " . $bahan['nama_bahan'] . " tidak memiliki stok yang cukup, stok yang tersedia hanya " . $oldstok . " " . $bahan['satuan'];
+        } elseif(!is_numeric($qty)) {
+            $errors['qty'] = "Kolom harus diisi angka!";
+        }
+
+        if(count($errors) > 0) {
+            return $errors;
+
+        } else {
+            try {
+                mysqli_query($conn, "UPDATE barang_masuk SET qty = '$qty' WHERE idmasuk = '$idmasuk'");
+                $berhasil++;
+            } catch (\Throwable $th) {
+            
+            }
+            $stok_now = $oldstok - $qty;
+
+            try {
+                mysqli_query($conn, "UPDATE bahan_pemasok SET stok = '$stok_now' WHERE idbahan = '$idbahan'");
+                $berhasil++;
+            } catch (\Throwable $th) {
+            
+            }
+
+            return $berhasil;
+        }
+    }
+
+    function delete($data) {
+        global $conn;
+
+        $idmasuk = $data['idmasuk'];
+        $idbahan = $data['idbahan'];
+        $qty = $data['qty'];
+
+        $berhasil = 0;
+
+        try {
+            mysqli_query($conn, "DELETE FROM barang_masuk WHERE idmasuk = '$idmasuk'");
+            $berhasil++;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        try {
+            $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = '$idbahan'")[0];
+            $stok = $bahan['stok'];
+
+            $stok_now = $stok + $qty;
+
+            mysqli_query($conn, "UPDATE bahan_pemasok SET stok = '$stok_now' WHERE idbahan = '$idbahan'");
+            $berhasil++;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return $berhasil;
+    }
 ?>

@@ -17,46 +17,16 @@
 
             $idpemasok = $transaksi['idpemasok'];
             $nama_pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
-            
-            // if(isset($_POST['submit'])) {
-            //     $errors = update($_POST);
 
-            //     if(is_numeric($errors)) {
-            //         if($errors > 0) {
-            //             $_SESSION["berhasil"] = "Data User Berhasil Diubah!";
-            //             echo "
-            //                 <script>
-            //                     document.location.href='../admin/user.php';
-            //                 </script>
-            //             ";
-            //         } else {
-            //             $_SESSION["gagal"] = "Data User Gagal Diubah!";
-            //             echo "
-            //                 <script>
-            //                     document.location.href='../admin/user.php';
-            //                 </script>
-            //             ";
-            //         }
-            //     }
-            // }
+            if(isset($_POST['delete'])) {
+                if(delete($_POST) > 0 ) {
+                    $_SESSION["berhasil"] = "Barang Pesanan Berhasil Dihapus!";
+                } else {
+                    $_SESSION["gagal"] = "Barang Pesanan Gagal Dihapus!";
+                }
 
-            // if(isset($_POST['hapus_foto'])) {
-            //     if(delete_foto($_POST) > 0 ) {
-            //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/user.php';
-            //             </script>
-            //         ";
-            //     } else {
-            //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/user.php';
-            //             </script>
-            //         ";
-            //     }
-            // }
+                header("Refresh:0");
+            }
         }
     } else {
         echo "<script>
@@ -191,11 +161,11 @@
                                         </td>
                                         <?php if($transaksi['status'] == "Belum Diproses") : ?>
                                             <td>
-                                                <a href="../edit/permintaan.php" class="btn btn-sm btn-primary">
+                                                <a href="../edit/permintaan.php?id=<?= enkripsi($barang['idmasuk']); ?>&dari=<?= $_GET['id']; ?>" class="btn btn-sm btn-primary">
                                                     <i class="bi bi-pencil-fill"></i>
                                                 </a>
                                                 |
-                                                <button type="button" class="btn btn-danger btn-sm" id="delete">
+                                                <button type="button" class="btn  btn-danger btn-sm" id="delete" data-bs-toggle="modal" data-bs-target="#delete_<?= $barang['idmasuk']; ?>">
                                                     <i class="bi bi-trash-fill"></i>
                                                 </button>
                                             </td>
@@ -219,6 +189,33 @@
                     </div>
                 </div>
                 <!-- konten selesai -->
+
+                <?php foreach($data_barang as $dabar) : ?>
+                    <!-- Modal -->
+                    <div class="modal fade" id="delete_<?= $dabar['idmasuk']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Barang Pesanan</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Yakin ingin menghapus data barang pesanan ini?
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="" method="post">
+                                        <input type="hidden" name="idmasuk" value="<?= $dabar['idmasuk']; ?>">                                    
+                                        <input type="hidden" name="idbahan" value="<?= $dabar['idbahan']; ?>">                                    
+                                        <input type="hidden" name="qty" value="<?= $dabar['qty']; ?>">                                    
+
+                                        <button type="submit" class="btn btn-danger" name="delete">Hapus</button>
+                                    </form>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
 
         </div>
@@ -238,7 +235,7 @@
 </html>
 
 <?php 
-    if(!isset($_POST['iduser'])) {
+    if(!isset($_POST['delete'])) {
         $_SESSION = [];
         session_unset();
         session_destroy();

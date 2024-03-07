@@ -1,3 +1,70 @@
+<?php 
+    require_once '../controller/TransaksiPembelian.php';
+
+    if(isset($_GET['id']) && isset($_GET['dari'])) {
+        $id = dekripsi($_GET['id']);
+
+        $data = query("SELECT * FROM barang_masuk WHERE idmasuk = '$id'");
+
+        if(count($data) == 0) {
+            echo "<script>
+                    document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
+                </script>";
+            exit;    
+        } else {
+            $data = $data[0];
+
+            $idbahan = $data['idbahan'];
+            $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = '$idbahan'")[0];
+            
+            if(isset($_POST['submit'])) {
+                $errors = update($_POST);
+
+                if(is_numeric($errors)) {
+                    if($errors > 1) {
+                        $_SESSION["berhasil"] = "Data Pembelian Berhasil Diubah!";
+                        echo "
+                            <script>
+                                document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
+                            </script>
+                        ";
+                    } else {
+                        $_SESSION["gagal"] = "Data Pembelian Gagal Diubah!";
+                        echo "
+                            <script>
+                                document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
+                            </script>
+                        ";
+                    }
+                }
+            }
+
+            // if(isset($_POST['hapus_foto'])) {
+            //     if(delete_foto($_POST) > 0 ) {
+            //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
+            //         echo "
+            //             <script>
+            //                 document.location.href='../admin/barang.php';
+            //             </script>
+            //         ";
+            //     } else {
+            //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
+            //         echo "
+            //             <script>
+            //                 document.location.href='../admin/barang.php';
+            //             </script>
+            //         ";
+            //     }
+            // }
+        }
+    } else {
+        echo "<script>
+                document.location.href='../admin/transaksi.php';
+            </script>";
+        exit;
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -44,28 +111,37 @@
 
 
                     <form method="post" action="">
+                        <input type="hidden" name="idmasuk" value="<?= $data['idmasuk']; ?>">
+                        <input type="hidden" name="idbahan" value="<?= $idbahan; ?>">
+                        <input type="hidden" name="oldqty" value="<?= $data['qty']; ?>">
+
                         <div class="mb-3 mt-4 row ms-5">
                             <div class="col-4 mb-3">
                                 <label class="fw-bold fs-5">Nama Barang :</label>
                             </div>
                             <div class="col-5 mb-3">
-                                <label class="fw-bold fs-5">Jumlah :</label>
+                                <label class="fw-bold fs-5" for="qty">Jumlah :</label>
                             </div>
 
                             <div class="col-4 mt-2">
-                                <label class="fw-bold">Tepung</label>
+                                <label class="fw-bold"><?= $bahan['nama_bahan']; ?></label>
                             </div>
                             <div class="col-5 mt-2">
-                                <input type="text" class="form-control" placeholder="masukkan jumlah">
+                                <input type="number" class="form-control <?= isset($errors['qty']) ? 'is-invalid' : ''; ?>" placeholder="masukkan jumlah" id="qty" name="qty" value="<?= isset($_POST['qty']) ? $_POST['qty'] : $data['qty']; ?>">
+                                <?php if(isset($errors['qty'])) : ?>
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        <?= $errors['qty']; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
 
 
                         <div class="d-flex justify-content-end me-5">
                             <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
-                                href="../admin/detail_transaksi.php">Kembali</a>
-                            <button type="button" class="btn btn-primary mt-3 px-4"
-                                style="border-radius: 15px;">Update</button>
+                                href="../admin/detail_transaksi.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <button type="submit" class="btn btn-primary mt-3 px-4"
+                                style="border-radius: 15px;" name="submit">Update</button>
                         </div>
                     </form>
                 </div>
