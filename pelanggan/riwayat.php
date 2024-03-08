@@ -1,3 +1,13 @@
+<?php 
+    require_once '../controller/TransaksiPenjualan.php';
+    validasi();
+
+    $user = cari_user();
+    $iduser = $user['iduser'];
+
+    $data_transaksi = query("SELECT * FROM transaksi_penjualan WHERE idpelanggan = '$iduser'");
+?>
+
 <html lang="en">
 
 <head>
@@ -40,6 +50,20 @@
                             Buat Pesanan
                         </a>
                     </div>
+
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
 
 
                     <div class="mb-5 mt-5">
@@ -96,3 +120,13 @@
 </body>
 
 </html>
+
+<?php 
+    if(isset($_POST['submit']) || isset($_POST['delete'])) {
+        
+    } else {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>
