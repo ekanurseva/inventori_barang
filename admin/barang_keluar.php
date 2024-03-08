@@ -1,3 +1,9 @@
+<?php 
+    require_once '../controller/TransaksiPenjualan.php';
+
+    $data_transaksi = query("SELECT * FROM transaksi_penjualan");
+?>
+
 <html lang="en">
 
 <head>
@@ -46,6 +52,7 @@
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Kode Transaksi</th>
                                     <th class="text-center" scope="col">Pelanggan</th>
                                     <th class="text-center" scope="col">Tanggal Transaksi</th>
@@ -54,25 +61,46 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        TP-20240201
-                                    </td>
-                                    <td>
-                                        Eka
-                                    </td>
-                                    <td>
-                                        12-12-2023 | 10:12:05
-                                    </td>
-                                    <td>
-                                        Rp 100.000
-                                    </td>
-                                    <td>
-                                        <a href="../admin/detail_barang_keluar.php" class="btn btn-sm btn-primary">
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($data_transaksi as $transaksi) :
+                                        $iduser = $transaksi['idpelanggan'];
+                                        $nama_pelanggan = query("SELECT nama FROM user WHERE iduser = '$iduser'")[0];
+
+                                        $idtransaksi = $transaksi['idtransaksi'];
+                                        $data_keluar = query("SELECT * FROM barang_keluar JOIN barang ON barang_keluar.idbarang = barang.idbarang WHERE idtransaksi = '$idtransaksi'");
+
+                                        $harga = 0;
+                                        foreach($data_keluar as $keluar) {
+                                            $harga += $keluar['qty'] * $keluar['harga'];
+                                        }
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $transaksi['kode_transaksi']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $nama_pelanggan['nama']; ?>
+                                        </td>
+                                        <td>
+                                            <?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?>
+                                        </td>
+                                        <td>
+                                            Rp <?= number_format($harga, 0, ',', '.'); ?>
+                                        </td>
+                                        <td>
+                                            <a href="../admin/detail_barang_keluar.php?id=<?= enkripsi($transaksi['idtransaksi']); ?>" class="btn btn-sm btn-primary">
+                                                Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>

@@ -101,7 +101,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <table class="table table-hover text-center">
+                        <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
                                     <th class="text-center" scope="col">No</th>
@@ -140,7 +140,9 @@
                                     endforeach;
                                 ?>
                                 <tr>
-                                    <th colspan="3">Total Pembayaran</th>
+                                    <th>Total Pembayaran</th>
+                                    <th></th>
+                                    <th></th>
                                     <th>
                                         Rp <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
@@ -164,6 +166,11 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#example").DataTable();
+        });
+    </script>
 </body>
 
 </html>

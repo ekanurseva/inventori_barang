@@ -1,3 +1,31 @@
+<?php 
+    require_once '../controller/TransaksiPenjualan.php';
+
+    if(isset($_GET['id'])) {
+        $id = dekripsi($_GET['id']);
+
+        $transaksi = query("SELECT * FROM transaksi_penjualan WHERE idtransaksi = '$id'");
+        
+        if(count($transaksi) == 0) {
+            echo "<script>
+                    document.location.href='barang_keluar.php';
+                </script>";
+            exit;    
+        } else {
+            $transaksi = $transaksi[0];
+            $data_barang = query("SELECT * FROM barang_keluar JOIN barang ON barang_keluar.idbarang = barang.idbarang WHERE idtransaksi = '$id'");
+
+            $idpelanggan = $transaksi['idpelanggan'];
+            $nama_pelanggan = query("SELECT nama FROM user WHERE iduser = $idpelanggan")[0];
+        }
+    } else {
+        echo "<script>
+                document.location.href='barang_keluar.php';
+            </script>";
+        exit;
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -45,51 +73,67 @@
                     <div class="text-center mt-4">
                         <div class="row">
                             <div class="col-1">
-                                <a href="../admin/barang_masuk.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
+                                <a href="../admin/barang_keluar.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
                             </div>
                             <div class="col-10">
-                                <h6>Nama Pelanggan : <b>Eka</b></h6>
+                                <h6>Nama Pelanggan : <b><?= $nama_pelanggan['nama']; ?></b></h6>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-sm-4">
-                                Status : <b>Selesai</b>
+                                Status : <b><?= $transaksi['status']; ?></b>
                             </div>
                             <div class="col-sm-4">
-                                <h6>TP-20240201</h6>
+                                <h6><?= $transaksi['kode_transaksi']; ?></h6>
                             </div>
                             <div class="col-sm-4">
-                                <h6>12-12-2023 | 10:12:05</h6>
+                                <h6><?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?></h6>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4">
-                        <table class="table table-hover text-center">
+                        <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Barang Pesanan</th>
                                     <th class="text-center" scope="col">Jumlah</th>
                                     <th class="text-center" scope="col">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php 
+                                    $i = 1;
+                                    $total = 0;
+                                    foreach($data_barang as $barang) :
+                                        $jumlah = $barang['qty'] * $barang['harga'];
+                                        $total += $jumlah;
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $barang['nama_barang']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $barang['qty']; ?>
+                                        </td>
+                                        <td>
+                                            Rp <?= number_format($jumlah, 0, ',', '.'); ?>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                                 <tr>
-                                    <td>
-                                        Cincau
-                                    </td>
-                                    <td>
-                                        2
-                                    </td>
-                                    <td>
-                                        Rp 100.000
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
                                     <th>Total Pembayaran</th>
+                                    <td></td>
+                                    <td></td>
                                     <th>
-                                        Rp 100.000
+                                        Rp <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
                                 </tr>
                             </tbody>
@@ -111,6 +155,12 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#example").DataTable();
+        });
+    </script>
 </body>
 
 </html>
