@@ -10,6 +10,7 @@
             } else {
                 $_SESSION["gagal"] = "Data User Gagal Diubah!";
             }
+            header("Refresh:0");
         }
     }
 
@@ -19,6 +20,7 @@
         } else {
             $_SESSION["gagal"] = "Foto Gagal Dihapus!";
         }
+        header("Refresh:0");
     }
 ?>
 
@@ -257,7 +259,11 @@
 </html>
 
 <?php 
-    $_SESSION = [];
-    session_unset();
-    session_destroy();
+    if(isset($_POST['submit']) || isset($_POST['hapus_foto'])) {
+        
+    } else {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
 ?>

@@ -1,5 +1,6 @@
 <?php 
     require_once '../controller/BahanPemasokController.php';
+    validasi_pemasok();
 
     if(isset($_POST['submit'])) {
         $errors = create($_POST);
@@ -9,6 +10,7 @@
             } else {
                 $_SESSION["gagal"] = "Data Bahan Baku Gagal Ditambah!";
             }
+            header("Refresh:0");
         } else {
             $_SESSION["error"] = "Terdapat data yang tidak valid, silahkan cek kembali form tambah bahan baku!";
         }
@@ -20,6 +22,7 @@
         } else {
             $_SESSION["gagal"] = "Bahan Baku Gagal Dihapus!";
         }
+        header("Refresh:0");
     }
 
     $data_bahan = query("SELECT * FROM bahan_pemasok");
@@ -257,7 +260,9 @@
 </html>
 
 <?php 
-    if(!isset($_POST['delete']) || !isset($_POST['submit'])) {
+    if(isset($_POST['submit']) || isset($_POST['delete'])) {
+        
+    } else {
         $_SESSION = [];
         session_unset();
         session_destroy();

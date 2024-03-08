@@ -1,3 +1,48 @@
+<?php 
+    require_once '../controller/TransaksiPembelian.php';
+    validasi_pemasok();
+
+    if(isset($_GET['id']) && isset($_GET['dari'])) {
+        $id = dekripsi($_GET['id']);
+
+        $data = query("SELECT * FROM barang_masuk WHERE idmasuk = '$id'");
+
+        if(count($data) == 0) {
+            echo "<script>
+                    document.location.href='../pemasok/detail.php?id=". $_GET['dari'] ."';
+                </script>";
+            exit;    
+        } else {
+            $data = $data[0];
+
+            $idbahan = $data['idbahan'];
+            $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = '$idbahan'")[0];
+            
+            if(isset($_POST['submit'])) {
+                $errors = update($_POST);
+
+                if(is_numeric($errors)) {
+                    if($errors > 1) {
+                        $_SESSION["berhasil"] = "Data Pembelian Berhasil Diubah!";
+                    } else {
+                        $_SESSION["gagal"] = "Data Pembelian Gagal Diubah!";
+                    }
+                    echo "
+                        <script>
+                            document.location.href='../pemasok/detail.php?id=". $_GET['dari'] ."';
+                        </script>
+                    ";
+                }
+            }
+        }
+    } else {
+        echo "<script>
+                document.location.href='../pemasok/pesanan.php';
+            </script>";
+        exit;
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -6,7 +51,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <title>Sistem Informasi Inventory Barang</title>
@@ -39,28 +83,37 @@
 
 
                     <form method="post" action="">
+                        <input type="hidden" name="idmasuk" value="<?= $data['idmasuk']; ?>">
+                        <input type="hidden" name="idbahan" value="<?= $idbahan; ?>">
+                        <input type="hidden" name="oldqty" value="<?= $data['qty']; ?>">
+
                         <div class="mb-3 mt-4 row ms-5">
                             <div class="col-4 mb-3">
                                 <label class="fw-bold fs-5">Nama Barang :</label>
                             </div>
                             <div class="col-5 mb-3">
-                                <label class="fw-bold fs-5">Jumlah :</label>
+                                <label class="fw-bold fs-5" for="qty">Jumlah :</label>
                             </div>
 
                             <div class="col-4 mt-2">
-                                <label class="fw-bold">Tepung</label>
+                                <label class="fw-bold"><?= $bahan['nama_bahan']; ?></label>
                             </div>
                             <div class="col-5 mt-2">
-                                <input type="text" class="form-control" placeholder="masukkan jumlah">
+                                <input type="number" class="form-control <?= isset($errors['qty']) ? 'is-invalid' : ''; ?>" placeholder="masukkan jumlah" id="qty" name="qty" value="<?= isset($_POST['qty']) ? $_POST['qty'] : $data['qty']; ?>">
+                                <?php if(isset($errors['qty'])) : ?>
+                                    <div id="validationServer03Feedback" class="invalid-feedback">
+                                        <?= $errors['qty']; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
 
 
                         <div class="d-flex justify-content-end me-5">
                             <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
-                                href="../pemasok/detail.php">Kembali</a>
-                            <button type="button" class="btn btn-primary mt-3 px-4"
-                                style="border-radius: 15px;">Update</button>
+                                href="../pemasok/detail.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <button type="submit" class="btn btn-primary mt-3 px-4"
+                                style="border-radius: 15px;" name="submit">Update</button>
                         </div>
                     </form>
                 </div>
@@ -77,13 +130,6 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#example").DataTable();
-        });
-    </script>
 </body>
 
 </html>

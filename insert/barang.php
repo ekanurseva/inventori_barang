@@ -7,19 +7,14 @@
         if(is_numeric($errors)) {
             if($errors > 0) {
                 $_SESSION["berhasil"] = "Data Barang Berhasil Ditambah!";
-                echo "
-                    <script>
-                        document.location.href='../admin/barang.php';
-                    </script>
-                ";
             } else {
                 $_SESSION["gagal"] = "Data Barang Gagal Ditambah!";
-                echo "
-                    <script>
-                        document.location.href='../admin/barang.php';
-                    </script>
-                ";
             }
+            echo "
+                <script>
+                    document.location.href='../admin/barang.php';
+                </script>
+            ";
         }
     }
 ?>

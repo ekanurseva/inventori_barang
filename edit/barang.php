@@ -20,38 +20,25 @@
                 if(is_numeric($errors)) {
                     if($errors > 0) {
                         $_SESSION["berhasil"] = "Data Barang Berhasil Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../admin/barang.php';
-                            </script>
-                        ";
                     } else {
                         $_SESSION["gagal"] = "Data Barang Gagal Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../admin/barang.php';
-                            </script>
-                        ";
                     }
+                    echo "
+                        <script>
+                            document.location.href='../admin/barang.php';
+                        </script>
+                    ";
                 }
             }
 
             if(isset($_POST['hapus_foto'])) {
                 if(delete_foto($_POST) > 0 ) {
                     $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-                    echo "
-                        <script>
-                            document.location.href='../admin/barang.php';
-                        </script>
-                    ";
                 } else {
                     $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-                    echo "
-                        <script>
-                            document.location.href='../admin/barang.php';
-                        </script>
-                    ";
                 }
+
+                header("Refresh:0");
             }
         }
     } else {
@@ -108,6 +95,19 @@
                         </h5>
                     </div>
 
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
 
                     <form method="post" action="" enctype="multipart/form-data">
                         <input type="hidden" name="idbarang" value="<?= $data['idbarang']; ?>">
@@ -306,3 +306,13 @@
 </body>
 
 </html>
+
+<?php 
+    if(isset($_POST['submit']) || isset($_POST['hapus_foto'])) {
+        
+    } else {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>

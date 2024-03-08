@@ -17,46 +17,6 @@
 
             $idpemasok = $transaksi['idpemasok'];
             $nama_pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
-            
-            // if(isset($_POST['submit'])) {
-            //     $errors = update($_POST);
-
-            //     if(is_numeric($errors)) {
-            //         if($errors > 0) {
-            //             $_SESSION["berhasil"] = "Data User Berhasil Diubah!";
-            //             echo "
-            //                 <script>
-            //                     document.location.href='../admin/user.php';
-            //                 </script>
-            //             ";
-            //         } else {
-            //             $_SESSION["gagal"] = "Data User Gagal Diubah!";
-            //             echo "
-            //                 <script>
-            //                     document.location.href='../admin/user.php';
-            //                 </script>
-            //             ";
-            //         }
-            //     }
-            // }
-
-            // if(isset($_POST['hapus_foto'])) {
-            //     if(delete_foto($_POST) > 0 ) {
-            //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/user.php';
-            //             </script>
-            //         ";
-            //     } else {
-            //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/user.php';
-            //             </script>
-            //         ";
-            //     }
-            // }
         }
     } else {
         echo "<script>

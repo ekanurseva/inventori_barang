@@ -23,39 +23,16 @@
                 if(is_numeric($errors)) {
                     if($errors > 1) {
                         $_SESSION["berhasil"] = "Data Pembelian Berhasil Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
-                            </script>
-                        ";
                     } else {
                         $_SESSION["gagal"] = "Data Pembelian Gagal Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
-                            </script>
-                        ";
                     }
+                    echo "
+                        <script>
+                            document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
+                        </script>
+                    ";
                 }
             }
-
-            // if(isset($_POST['hapus_foto'])) {
-            //     if(delete_foto($_POST) > 0 ) {
-            //         $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/barang.php';
-            //             </script>
-            //         ";
-            //     } else {
-            //         $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-            //         echo "
-            //             <script>
-            //                 document.location.href='../admin/barang.php';
-            //             </script>
-            //         ";
-            //     }
-            // }
         }
     } else {
         echo "<script>
@@ -73,7 +50,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <title>Sistem Informasi Inventory Barang</title>
@@ -158,13 +134,6 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#example").DataTable();
-        });
-    </script>
 </body>
 
 </html>

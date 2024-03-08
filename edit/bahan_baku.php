@@ -20,19 +20,14 @@
                 if(is_numeric($errors)) {
                     if($errors > 0) {
                         $_SESSION["berhasil"] = "Data Bahan Baku Berhasil Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../pemasok/barang.php';
-                            </script>
-                        ";
                     } else {
                         $_SESSION["gagal"] = "Data Bahan Baku Gagal Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../pemasok/barang.php';
-                            </script>
-                        ";
                     }
+                    echo "
+                        <script>
+                            document.location.href='../pemasok/barang.php';
+                        </script>
+                    ";
                 }
             }
         }

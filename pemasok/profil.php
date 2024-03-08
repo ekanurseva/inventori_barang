@@ -1,5 +1,6 @@
 <?php 
     require_once '../controller/UserController.php';
+    validasi_pemasok();
 
     if(isset($_POST['submit'])) {
         $errors = update($_POST);
@@ -10,6 +11,7 @@
             } else {
                 $_SESSION["gagal"] = "Data User Gagal Diubah!";
             }
+            header("Refresh:0");
         }
     }
 
@@ -19,6 +21,7 @@
         } else {
             $_SESSION["gagal"] = "Foto Gagal Dihapus!";
         }
+        header("Refresh:0");
     }
 ?>
 
@@ -241,12 +244,29 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+      function previewImg() {
+        const sampul = document.querySelector('#foto');
+        const imgPreview = document.querySelector('.img-preview');
+
+        const fileSampul = new FileReader();
+        fileSampul.readAsDataURL(sampul.files[0]);
+
+        fileSampul.onload = function(e) {
+          imgPreview.src = e.target.result;
+        }
+      }
+    </script>
 </body>
 
 </html>
 
 <?php 
-    $_SESSION = [];
-    session_unset();
-    session_destroy();
+    if(isset($_POST['submit']) || isset($_POST['hapus_foto'])) {
+        
+    } else {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
 ?>

@@ -20,38 +20,24 @@
                 if(is_numeric($errors)) {
                     if($errors > 0) {
                         $_SESSION["berhasil"] = "Data User Berhasil Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../admin/user.php';
-                            </script>
-                        ";
                     } else {
                         $_SESSION["gagal"] = "Data User Gagal Diubah!";
-                        echo "
-                            <script>
-                                document.location.href='../admin/user.php';
-                            </script>
-                        ";
                     }
+                    echo "
+                        <script>
+                            document.location.href='../admin/user.php';
+                        </script>
+                    ";
                 }
             }
 
             if(isset($_POST['hapus_foto'])) {
                 if(delete_foto($_POST) > 0 ) {
                     $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-                    echo "
-                        <script>
-                            document.location.href='../admin/user.php';
-                        </script>
-                    ";
                 } else {
                     $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-                    echo "
-                        <script>
-                            document.location.href='../admin/user.php';
-                        </script>
-                    ";
                 }
+                header("Refresh:0");
             }
         }
     } else {
@@ -105,6 +91,20 @@
                         </h5>
                     </div>
 
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <form method="post" action="" enctype="multipart/form-data">
                         <input type="hidden" name="iduser" value="<?= $data['iduser']; ?>">
                         <input type="hidden" name="oldusername" value="<?= $data['username']; ?>">
@@ -128,7 +128,7 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="password" class="col-sm-3 me-0 col-form-label">Password :</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control<?= isset($errors['password']) ? 'is-invalid' : ''; ?>" id="password" name="password" value="<?= isset($_POST['password']) ? '' : $data['password']; ?>">
+                                <input type="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : ''; ?>" id="password" name="password" value="<?= isset($_POST['password']) ? '' : $data['password']; ?>">
                                 <?php if(isset($errors['password'])) : ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['password']; ?>
@@ -140,7 +140,7 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="password2" class="col-sm-3 me-0 col-form-label">Konfirmasi Password :</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control " id="password2" name="password2" value="<?= isset($_POST['password']) ? '' : $user['password']; ?>">
+                                <input type="password" class="form-control " id="password2" name="password2" value="<?= isset($_POST['password']) ? '' : $data['password']; ?>">
                             </div>
                         </div>
 
@@ -324,3 +324,13 @@
 </body>
 
 </html>
+
+<?php 
+    if(isset($_POST['submit']) || isset($_POST['hapus_foto'])) {
+        
+    } else {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>

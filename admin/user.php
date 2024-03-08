@@ -6,19 +6,14 @@
     if(isset($_POST['iduser'])) {
         if(delete($_POST) > 0 ) {
             $_SESSION["berhasil"] = "User Berhasil Dihapus!";
-            echo "
-                <script>
-                    document.location.href='user.php';
-                </script>
-            ";
         } else {
             $_SESSION["gagal"] = "User Gagal Dihapus!";
-            echo "
-                <script>
-                    document.location.href='user.php';
-                </script>
-            ";
         }
+        echo "
+            <script>
+                document.location.href='user.php';
+            </script>
+        ";
     }
 ?>
 

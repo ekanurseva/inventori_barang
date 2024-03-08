@@ -6,19 +6,15 @@
     if(isset($_POST['idbarang'])) {
         if(delete($_POST) > 0 ) {
             $_SESSION["berhasil"] = "Barang Berhasil Dihapus!";
-            echo "
-                <script>
-                    document.location.href='barang.php';
-                </script>
-            ";
+            
         } else {
             $_SESSION["gagal"] = "Barang Gagal Dihapus!";
-            echo "
-                <script>
-                    document.location.href='barang.php';
-                </script>
-            ";
         }
+        echo "
+            <script>
+                document.location.href='barang.php';
+            </script>
+        ";
     }
 ?>
 
