@@ -20,11 +20,11 @@
             if($errors > 1) {
                 if(isset($_GET['dari'])) {
                     $_SESSION["berhasil"] = "Transaksi Berhasil Ditambahkan!";
-                    // echo "
-                    //     <script>
-                    //         document.location.href='../pelanggan/detail_transaksi.php?id=" . $_GET['dari'] . "';
-                    //     </script>
-                    // ";
+                    echo "
+                        <script>
+                            document.location.href='detail.php?id=" . $_GET['dari'] . "';
+                        </script>
+                    ";
                 } else {
                     $_SESSION["berhasil"] = "Transaksi Berhasil Dibuat!";
                     echo "
@@ -155,6 +155,10 @@
                         <div class="d-flex justify-content-end me-5">
                             <button type="submit" class="btn btn-primary px-4"
                                 style="border-radius: 15px;" name="submit">Submit</button>
+                            <?php if(isset($_GET['dari'])) : ?>
+                                <a class="btn btn-secondary px-4 ms-3"
+                                    style="border-radius: 15px;" href="detail.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php endif; ?>
                         </div>
                     </form>
                 </div>

@@ -17,6 +17,24 @@
 
             $idpelanggan = $transaksi['idpelanggan'];
             $nama_pelanggan = query("SELECT nama FROM user WHERE iduser = $idpelanggan")[0];
+
+            if(isset($_POST['delete'])) {
+                if(delete($_POST) > 0 ) {
+                    $_SESSION["berhasil"] = "Barang Pesanan Berhasil Dihapus!";
+                } else {
+                    $_SESSION["gagal"] = "Barang Pesanan Gagal Dihapus!";
+                }
+                header("Refresh:0");
+            }
+
+            if(isset($_POST['status_pesanan'])) {
+                if(update_status($_POST) > 0 ) {
+                    $_SESSION["berhasil"] = "Status Berhasil Diubah!";
+                } else {
+                    $_SESSION["gagal"] = "Status Gagal Diubah!";
+                }
+                header("Refresh:0");
+            }
         }
     } else {
         echo "<script>
@@ -88,9 +106,11 @@
                                     </div>
                                     <div class="col-sm-7 ms-0">
                                         <h6>: <?= $transaksi['status']; ?>
+                                        <?php if($transaksi['status'] != "Selesai") : ?>
                                             <button type="button" style="border: none; background: none;"
                                                 data-bs-toggle="modal" data-bs-target="#statusModal"><i
                                                     class="bi bi-pencil-fill"></i></button>
+                                        <?php endif; ?>
                                         </h6>
                                     </div>
                                 </div>
@@ -104,6 +124,20 @@
                         </div>
                     </div>
 
+                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        <div class="my-3">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="mt-4">
                         <table id="example" class="table table-hover text-center">
                             <thead>
@@ -112,7 +146,9 @@
                                     <th class="text-center" scope="col">Barang Pesanan</th>
                                     <th class="text-center" scope="col">Jumlah</th>
                                     <th class="text-center" scope="col">Total</th>
-                                    <th class="text-center" scope="col">Aksi</th>
+                                    <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                        <th class="text-center" scope="col">Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,15 +172,17 @@
                                         <td>
                                             Rp <?= number_format($jumlah, 0, ',', '.'); ?>
                                         </td>
-                                        <td>
-                                            <a href="../edit/pesanan.php" class="btn btn-sm btn-primary">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                            |
-                                            <button type="button" class="btn btn-danger btn-sm" id="delete">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        </td>
+                                        <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                            <td>
+                                                <a href="../edit/pesanan.php?id=<?= enkripsi($barang['idkeluar']); ?>&dari=<?= $_GET['id']; ?>" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                                |
+                                                <button type="button" class="btn  btn-danger btn-sm" id="delete" data-bs-toggle="modal" data-bs-target="#delete_<?= $barang['idkeluar']; ?>">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php 
                                     $i++;
@@ -157,7 +195,9 @@
                                     <th>
                                         Rp <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
-                                    <td></td>
+                                    <?php if($transaksi['status'] == "Belum Diproses") : ?>
+                                        <td></td>
+                                    <?php endif; ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -176,6 +216,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <form action="" method="post">
+                                <input type="hidden" name="idtransaksi" value="<?= $transaksi['idtransaksi']; ?>">
                                 <div class="modal-body">
                                     <label for="status" class="form-label">Pilih status pemesanan</label>
                                     <select class="form-select" aria-label="Default select example" name="status">
@@ -199,6 +240,33 @@
                     </div>
                 </div>
                 <!-- Modal Status selesai -->
+
+                <?php foreach($data_barang as $dabar) : ?>
+                    <!-- Modal -->
+                    <div class="modal fade" id="delete_<?= $dabar['idkeluar']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Barang Pesanan</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Yakin ingin menghapus data barang pesanan ini?
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="" method="post">
+                                        <input type="hidden" name="idkeluar" value="<?= $dabar['idkeluar']; ?>">                                    
+                                        <input type="hidden" name="idbarang" value="<?= $dabar['idbarang']; ?>">                                    
+                                        <input type="hidden" name="qty" value="<?= $dabar['qty']; ?>">                                    
+
+                                        <button type="submit" class="btn btn-danger" name="delete">Hapus</button>
+                                    </form>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
 
         </div>
@@ -221,3 +289,13 @@
 </body>
 
 </html>
+
+<?php 
+    if(isset($_POST['status_pesanan']) || isset($_POST['delete'])) {
+        
+    } else {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+    }
+?>

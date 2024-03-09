@@ -87,7 +87,13 @@
                                 <h6><?= $transaksi['kode_transaksi']; ?></h6>
                             </div>
                             <div class="col-sm-4">
-                                <h6><?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?></h6>
+                                <?php if($data_barang[0]['tgl_keluar'] != null) : ?>
+                                    <h6>
+                                        <?= date("d-m-Y | H:i:s", strtotime($data_barang[0]['tgl_keluar'])); ?>
+                                    </h6>
+                                <?php else : ?>
+                                    -
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

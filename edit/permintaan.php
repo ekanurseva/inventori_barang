@@ -6,11 +6,20 @@
 
         $data = query("SELECT * FROM barang_masuk WHERE idmasuk = '$id'");
 
+        $user = cari_user();
+
         if(count($data) == 0) {
-            echo "<script>
-                    document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
-                </script>";
-            exit;    
+            if($user['level'] == "Admin") {
+                echo "<script>
+                        document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
+                    </script>";
+                exit;    
+            } elseif($user['level'] == "Pemasok") {
+                echo "<script>
+                        document.location.href='../pemasok/detail.php?id=". $_GET['dari'] ."';
+                    </script>";
+                exit;    
+            }
         } else {
             $data = $data[0];
 
@@ -26,19 +35,34 @@
                     } else {
                         $_SESSION["gagal"] = "Data Pembelian Gagal Diubah!";
                     }
-                    echo "
-                        <script>
-                            document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
-                        </script>
-                    ";
+
+                    if($user['level'] == "Admin") {
+                        echo "<script>
+                                document.location.href='../admin/detail_transaksi.php?id=". $_GET['dari'] ."';
+                            </script>";
+                        exit;    
+                    } elseif($user['level'] == "Pemasok") {
+                        echo "<script>
+                                document.location.href='../pemasok/detail.php?id=". $_GET['dari'] ."';
+                            </script>";
+                        exit;    
+                    }
                 }
             }
         }
     } else {
-        echo "<script>
-                document.location.href='../admin/transaksi.php';
-            </script>";
-        exit;
+        if($user['level'] == "Admin") {
+            echo "<script>
+                    document.location.href='../admin/transaksi.php';
+                </script>";
+            exit;
+        } elseif($user['level'] == "Pemasok") {
+            echo "<script>
+                    document.location.href='../pemasok/pesanan.php';
+                </script>";
+            exit;    
+        }
+        
     }
 ?>
 
@@ -73,7 +97,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                    if($user['level'] == "Admin") {
+                        require_once('../navbar/sidebar.php');
+                    }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -114,8 +140,13 @@
 
 
                         <div class="d-flex justify-content-end me-5">
-                            <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
-                                href="../admin/detail_transaksi.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php if($user['level'] == "Admin") : ?>
+                                <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
+                                    href="../admin/detail_transaksi.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php elseif($user['level'] == "Pemasok") : ?>
+                                <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
+                                    href="../pemasok/detail.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php endif; ?>
                             <button type="submit" class="btn btn-primary mt-3 px-4"
                                 style="border-radius: 15px;" name="submit">Update</button>
                         </div>

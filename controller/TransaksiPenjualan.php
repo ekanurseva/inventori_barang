@@ -93,4 +93,105 @@
             return $berhasil;
         }
     }
+
+    function update_status($data) {
+        global $conn;
+
+        $idtransaksi = $data['idtransaksi'];
+        $status = $data['status'];
+
+        if($status == "Selesai") {
+            $transaksi = query("SELECT * FROM transaksi_penjualan WHERE idtransaksi = '$idtransaksi'")[0];
+
+            try {
+                mysqli_query($conn, "UPDATE transaksi_penjualan SET status = '$status' WHERE idtransaksi = '$idtransaksi'");
+                mysqli_query($conn, "UPDATE barang_keluar SET tgl_keluar = CURRENT_TIMESTAMP() WHERE idtransaksi = '$idtransaksi'");
+
+                return 1;
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        } else {
+            mysqli_query($conn, "UPDATE transaksi_penjualan SET status = '$status' WHERE idtransaksi = '$idtransaksi'");
+            return mysqli_affected_rows($conn);
+        }
+
+    }
+
+    function update($data) {
+        global $conn;
+
+        $errors = [];
+
+        $idkeluar = $data['idkeluar'];
+        $idbarang = $data['idbarang'];
+        $oldqty = $data['oldqty'];
+        $qty = htmlspecialchars($data['qty']);
+
+        $barang = query("SELECT * FROM barang WHERE idbarang = '$idbarang'")[0];
+        $oldstok = $oldqty + $barang['stok'];
+
+        $berhasil = 0;
+
+        if($qty == 0) {
+            $errors['qty'];
+        } elseif($qty > $oldstok) {
+            $errors['qty'] = "Barang " . $barang['nama_barang'] . " tidak memiliki stok yang cukup, stok yang tersedia hanya " . $oldstok . " " . $barang['satuan'];
+        } elseif(!is_numeric($qty)) {
+            $errors['qty'] = "Kolom harus diisi angka!";
+        }
+
+        if(count($errors) > 0) {
+            return $errors;
+
+        } else {
+            try {
+                mysqli_query($conn, "UPDATE barang_keluar SET qty = '$qty' WHERE idkeluar = '$idkeluar'");
+                $berhasil++;
+            } catch (\Throwable $th) {
+            
+            }
+            $stok_now = $oldstok - $qty;
+
+            try {
+                mysqli_query($conn, "UPDATE barang SET stok = '$stok_now' WHERE idbarang = '$idbarang'");
+                $berhasil++;
+            } catch (\Throwable $th) {
+            
+            }
+
+            return $berhasil;
+        }
+    }
+
+    function delete($data) {
+        global $conn;
+
+        $idkeluar = $data['idkeluar'];
+        $idbarang = $data['idbarang'];
+        $qty = $data['qty'];
+
+        $berhasil = 0;
+
+        try {
+            mysqli_query($conn, "DELETE FROM barang_keluar WHERE idkeluar = '$idkeluar'");
+            $berhasil++;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        try {
+            $bahan = query("SELECT * FROM barang WHERE idbarang = '$idbarang'")[0];
+            $stok = $bahan['stok'];
+
+            $stok_now = $stok + $qty;
+
+            mysqli_query($conn, "UPDATE barang SET stok = '$stok_now' WHERE idbarang = '$idbarang'");
+            $berhasil++;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return $berhasil;
+    }
 ?>

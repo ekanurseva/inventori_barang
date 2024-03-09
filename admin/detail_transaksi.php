@@ -118,7 +118,7 @@
 
                     <?php if($transaksi['status'] == "Belum Diproses") : ?>
                         <div class="mt-4 ">
-                            <a class="btn btn-primary" href="../insert/permintaan.php?pemasok=<?= enkripsi($transaksi['idpemasok']); ?>&dari=<?= $_GET['id']; ?>">Tambah Permintaan</a>
+                            <a class="btn btn-primary" href="../insert/pesanan.php?pemasok=<?= enkripsi($transaksi['idpemasok']); ?>&dari=<?= $_GET['id']; ?>">Tambah Permintaan</a>
                         </div>
                     <?php endif; ?>
 

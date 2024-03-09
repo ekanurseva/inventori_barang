@@ -86,7 +86,11 @@
                                             <?= $nama_pelanggan['nama']; ?>
                                         </td>
                                         <td>
-                                            <?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?>
+                                            <?php if($data_keluar[0]['tgl_keluar'] != null) : ?>
+                                                <?= date("d-m-Y | H:i:s", strtotime($data_keluar[0]['tgl_keluar'])); ?>
+                                            <?php else : ?>
+                                                -
+                                            <?php endif; ?>
                                         </td>
                                         <td>
                                             Rp <?= number_format($harga, 0, ',', '.'); ?>

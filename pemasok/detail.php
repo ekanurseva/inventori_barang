@@ -171,7 +171,7 @@
                                         </td>
                                         <?php if($transaksi['status'] == "Belum Diproses") : ?>
                                             <td>
-                                                <a href="../edit/pesanan.php?id=<?= enkripsi($barang['idmasuk']); ?>&dari=<?= $_GET['id']; ?>" class="btn btn-sm btn-primary">
+                                                <a href="../edit/permintaan.php?id=<?= enkripsi($barang['idmasuk']); ?>&dari=<?= $_GET['id']; ?>" class="btn btn-sm btn-primary">
                                                     <i class="bi bi-pencil-fill"></i>
                                                 </a>
                                                 |

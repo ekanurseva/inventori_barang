@@ -1,22 +1,30 @@
 <?php 
-    require_once '../controller/TransaksiPembelian.php';
-    validasi_pemasok();
-
+    require_once '../controller/TransaksiPenjualan.php';
+    
+    $user = cari_user();
     if(isset($_GET['id']) && isset($_GET['dari'])) {
         $id = dekripsi($_GET['id']);
 
-        $data = query("SELECT * FROM barang_masuk WHERE idmasuk = '$id'");
+        $data = query("SELECT * FROM barang_keluar WHERE idkeluar = '$id'");
+
 
         if(count($data) == 0) {
-            echo "<script>
-                    document.location.href='../pemasok/detail.php?id=". $_GET['dari'] ."';
-                </script>";
-            exit;    
+            if($user['level'] == "Admin") {
+                echo "<script>
+                        document.location.href='../admin/detail_pesanan.php?id=". $_GET['dari'] ."';
+                    </script>";
+                exit;    
+            } elseif($user['level'] == "User") {
+                echo "<script>
+                        document.location.href='../pelanggan/detail.php?id=". $_GET['dari'] ."';
+                    </script>";
+                exit;
+            }
         } else {
             $data = $data[0];
 
-            $idbahan = $data['idbahan'];
-            $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = '$idbahan'")[0];
+            $idbarang = $data['idbarang'];
+            $barang = query("SELECT * FROM barang WHERE idbarang = '$idbarang'")[0];
             
             if(isset($_POST['submit'])) {
                 $errors = update($_POST);
@@ -27,19 +35,33 @@
                     } else {
                         $_SESSION["gagal"] = "Data Pembelian Gagal Diubah!";
                     }
-                    echo "
-                        <script>
-                            document.location.href='../pemasok/detail.php?id=". $_GET['dari'] ."';
-                        </script>
-                    ";
+
+                    if($user['level'] == "Admin") {
+                        echo "<script>
+                                document.location.href='../admin/detail_pesanan.php?id=". $_GET['dari'] ."';
+                            </script>";
+                        exit;    
+                    } elseif($user['level'] == "User") {
+                        echo "<script>
+                                document.location.href='../pelanggan/detail.php?id=". $_GET['dari'] ."';
+                            </script>";
+                        exit;
+                    }
                 }
             }
         }
     } else {
-        echo "<script>
-                document.location.href='../pemasok/pesanan.php';
-            </script>";
-        exit;
+        if($user['level'] == "Admin") {
+            echo "<script>
+                    document.location.href='../admin/transaksi_pesanan.php';
+                </script>";
+            exit;    
+        } elseif($user['level'] == "User") {
+            echo "<script>
+                    document.location.href='../pelanggan/riwayat.php';
+                </script>";
+            exit;
+        }
     }
 ?>
 
@@ -66,13 +88,22 @@
     <div class="content">
         <!-- navbar -->
         <?php
-        require_once('../navbar/navbar.php');
+        if($user['level'] == "Admin") {
+            require_once('../navbar/navbar.php');
+        } elseif($user['level'] == "User") {
+            require_once('../navbar/navbar_pelanggan.php');
+        }
         ?>
         <!-- navbar selesai -->
 
         <div class="main-container m-0">
             <div class="d-flex">
 
+                <?php
+                    if($user['level'] == "Admin") {
+                        require_once('../navbar/sidebar.php');
+                    }
+                ?>
                 <!-- konten -->
                 <div class="contents px-3 py-3">
                     <div class="box1">
@@ -83,8 +114,8 @@
 
 
                     <form method="post" action="">
-                        <input type="hidden" name="idmasuk" value="<?= $data['idmasuk']; ?>">
-                        <input type="hidden" name="idbahan" value="<?= $idbahan; ?>">
+                        <input type="hidden" name="idkeluar" value="<?= $data['idkeluar']; ?>">
+                        <input type="hidden" name="idbarang" value="<?= $idbarang; ?>">
                         <input type="hidden" name="oldqty" value="<?= $data['qty']; ?>">
 
                         <div class="mb-3 mt-4 row ms-5">
@@ -96,7 +127,7 @@
                             </div>
 
                             <div class="col-4 mt-2">
-                                <label class="fw-bold"><?= $bahan['nama_bahan']; ?></label>
+                                <label class="fw-bold"><?= $barang['nama_barang']; ?></label>
                             </div>
                             <div class="col-5 mt-2">
                                 <input type="number" class="form-control <?= isset($errors['qty']) ? 'is-invalid' : ''; ?>" placeholder="masukkan jumlah" id="qty" name="qty" value="<?= isset($_POST['qty']) ? $_POST['qty'] : $data['qty']; ?>">
@@ -110,8 +141,13 @@
 
 
                         <div class="d-flex justify-content-end me-5">
-                            <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
-                                href="../pemasok/detail.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php if($user['level'] == "Admin") : ?>
+                                <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
+                                    href="../admin/detail_pesanan.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php elseif($user['level'] == "User") : ?>
+                                <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
+                                    href="../pelanggan/detail.php?id=<?= $_GET['dari']; ?>">Kembali</a>
+                            <?php endif; ?>
                             <button type="submit" class="btn btn-primary mt-3 px-4"
                                 style="border-radius: 15px;" name="submit">Update</button>
                         </div>
