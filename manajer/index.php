@@ -1,3 +1,11 @@
+<?php
+require_once '../controller/UserController.php';
+validasi_manajer();
+
+$data_user = query("SELECT * FROM user");
+
+?>
+
 <html lang="en">
 
 <head>
@@ -38,7 +46,9 @@
                                 <h6 class="card-header fw-bold">Data User</h6>
                                 <div class="card-body">
                                     <h6 class="card-title text-center">Jumlah User</h6>
-                                    <p class="card-text text-center">5</p>
+                                    <p class="card-text text-center">
+                                        <?= count($data_user); ?>
+                                    </p>
                                     <div class="text-center">
                                         <a class="btn btn-light btn-sm" href="../admin/user.php">
                                             View
@@ -64,7 +74,7 @@
                                 <h6 class="card-header fw-bold">Update Profil</h6>
                                 <div class="card-body">
                                     <h6 class="card-title text-center">Manajer 1</h6>
-                                    <p class="card-text text-center">PT. Apa</p>
+                                    <p class="card-text text-center">SIIB</p>
                                     <div class="text-center">
                                         <a class="btn btn-light btn-sm" href="../manajer/profil.php">
                                             View

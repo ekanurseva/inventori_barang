@@ -1,51 +1,53 @@
-<?php 
-    require_once '../controller/UserController.php';
+<?php
+require_once '../controller/UserController.php';
 
-    if(isset($_GET['id'])) {
-        $id = dekripsi($_GET['id']);
+$user = cari_user();
 
-        $data = query("SELECT * FROM user WHERE iduser = '$id'");
+if (isset($_GET['id'])) {
+    $id = dekripsi($_GET['id']);
 
-        if(count($data) == 0) {
-            echo "<script>
+    $data = query("SELECT * FROM user WHERE iduser = '$id'");
+
+    if (count($data) == 0) {
+        echo "<script>
                     document.location.href='../admin/user.php';
                 </script>";
-            exit;    
-        } else {
-            $data = $data[0];
-            
-            if(isset($_POST['submit'])) {
-                $errors = update($_POST);
+        exit;
+    } else {
+        $data = $data[0];
 
-                if(is_numeric($errors)) {
-                    if($errors > 0) {
-                        $_SESSION["berhasil"] = "Data User Berhasil Diubah!";
-                    } else {
-                        $_SESSION["gagal"] = "Data User Gagal Diubah!";
-                    }
-                    echo "
+        if (isset($_POST['submit'])) {
+            $errors = update($_POST);
+
+            if (is_numeric($errors)) {
+                if ($errors > 0) {
+                    $_SESSION["berhasil"] = "Data User Berhasil Diubah!";
+                } else {
+                    $_SESSION["gagal"] = "Data User Gagal Diubah!";
+                }
+                echo "
                         <script>
                             document.location.href='../admin/user.php';
                         </script>
                     ";
-                }
-            }
-
-            if(isset($_POST['hapus_foto'])) {
-                if(delete_foto($_POST) > 0 ) {
-                    $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
-                } else {
-                    $_SESSION["gagal"] = "Foto Gagal Dihapus!";
-                }
-                header("Refresh:0");
             }
         }
-    } else {
-        echo "<script>
+
+        if (isset($_POST['hapus_foto'])) {
+            if (delete_foto($_POST) > 0) {
+                $_SESSION["berhasil"] = "Foto Berhasil Dihapus!";
+            } else {
+                $_SESSION["gagal"] = "Foto Gagal Dihapus!";
+            }
+            header("Refresh:0");
+        }
+    }
+} else {
+    echo "<script>
                 document.location.href='../admin/user.php';
             </script>";
-        exit;
-    }
+    exit;
+}
 ?>
 
 <html lang="en">
@@ -79,7 +81,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -91,16 +95,18 @@
                         </h5>
                     </div>
 
-                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                    <?php if (isset($_SESSION['berhasil'])): ?>
                         <div class="my-3">
                             <div class="alert alert-success" role="alert">
-                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                                <i class="bi bi-check-circle"></i>
+                                <?= $_SESSION['berhasil']; ?>
                             </div>
                         </div>
-                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                    <?php elseif (isset($_SESSION['gagal'])): ?>
                         <div class="my-3">
                             <div class="alert alert-danger" role="alert">
-                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                                <i class="bi bi-x-circle"></i>
+                                <?= $_SESSION['gagal']; ?>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -116,8 +122,11 @@
                         <div class="mb-3 mt-4 row ms-5">
                             <label for="username" class="col-sm-3 me-0 col-form-label">Username :</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control <?= isset($errors['username']) ? 'is-invalid' : ''; ?>" id="username" name="username" value="<?= isset($_POST['username']) ? $_POST['username'] : $data['username']; ?>">
-                                <?php if(isset($errors['username'])) : ?>
+                                <input type="text"
+                                    class="form-control <?= isset($errors['username']) ? 'is-invalid' : ''; ?>"
+                                    id="username" name="username"
+                                    value="<?= isset($_POST['username']) ? $_POST['username'] : $data['username']; ?>">
+                                <?php if (isset($errors['username'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['username']; ?>
                                     </div>
@@ -128,27 +137,33 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="password" class="col-sm-3 me-0 col-form-label">Password :</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : ''; ?>" id="password" name="password" value="<?= isset($_POST['password']) ? '' : $data['password']; ?>">
-                                <?php if(isset($errors['password'])) : ?>
+                                <input type="password"
+                                    class="form-control <?= isset($errors['password']) ? 'is-invalid' : ''; ?>"
+                                    id="password" name="password"
+                                    value="<?= isset($_POST['password']) ? '' : $data['password']; ?>">
+                                <?php if (isset($errors['password'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['password']; ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="password2" class="col-sm-3 me-0 col-form-label">Konfirmasi Password :</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control " id="password2" name="password2" value="<?= isset($_POST['password']) ? '' : $data['password']; ?>">
+                                <input type="password" class="form-control " id="password2" name="password2"
+                                    value="<?= isset($_POST['password']) ? '' : $data['password']; ?>">
                             </div>
                         </div>
 
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="nama" class="col-sm-3 me-0 col-form-label">Nama Lengkap:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control <?= isset($errors['nama']) ? 'is-invalid' : ''; ?>" id="nama" name="nama" value="<?= isset($_POST['nama']) ? $_POST['nama'] : $data['nama']; ?>">
-                                <?php if(isset($errors['nama'])) : ?>
+                                <input type="text"
+                                    class="form-control <?= isset($errors['nama']) ? 'is-invalid' : ''; ?>" id="nama"
+                                    name="nama" value="<?= isset($_POST['nama']) ? $_POST['nama'] : $data['nama']; ?>">
+                                <?php if (isset($errors['nama'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['nama']; ?>
                                     </div>
@@ -159,8 +174,11 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="email" class="col-sm-3 me-0 col-form-label">Email :</label>
                             <div class="col-sm-8">
-                                <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : ''; ?>" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : $data['email']; ?>">
-                                <?php if(isset($errors['email'])) : ?>
+                                <input type="email"
+                                    class="form-control <?= isset($errors['email']) ? 'is-invalid' : ''; ?>" id="email"
+                                    name="email"
+                                    value="<?= isset($_POST['email']) ? $_POST['email'] : $data['email']; ?>">
+                                <?php if (isset($errors['email'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['email']; ?>
                                     </div>
@@ -171,8 +189,11 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="telepon" class="col-sm-3 me-0 col-form-label">No Handphone :</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control <?= isset($errors['telepon']) ? 'is-invalid' : ''; ?>" id="telepon" name="telepon" value="<?= isset($_POST['telepon']) ? $_POST['telepon'] : $data['telepon']; ?>">
-                                <?php if(isset($errors['telepon'])) : ?>
+                                <input type="text"
+                                    class="form-control <?= isset($errors['telepon']) ? 'is-invalid' : ''; ?>"
+                                    id="telepon" name="telepon"
+                                    value="<?= isset($_POST['telepon']) ? $_POST['telepon'] : $data['telepon']; ?>">
+                                <?php if (isset($errors['telepon'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['telepon']; ?>
                                     </div>
@@ -183,20 +204,26 @@
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="alamat" class="col-sm-3 me-0 col-form-label">Alamat :</label>
                             <div class="col-sm-8">
-                                <textarea <?= isset($errors['alamat']) ? '' : 'style="border: 1px solid black;"'; ?> class="form-control <?= isset($errors['alamat']) ? 'is-invalid' : ''; ?>" id="alamat" name="alamat" rows="2"><?= isset($_POST['alamat']) ? $_POST['alamat'] : $data['alamat']; ?></textarea>
-                                <?php if(isset($errors['alamat'])) : ?>
+                                <textarea <?= isset($errors['alamat']) ? '' : 'style="border: 1px solid black;"'; ?>
+                                    class="form-control <?= isset($errors['alamat']) ? 'is-invalid' : ''; ?>"
+                                    id="alamat" name="alamat"
+                                    rows="2"><?= isset($_POST['alamat']) ? $_POST['alamat'] : $data['alamat']; ?></textarea>
+                                <?php if (isset($errors['alamat'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['alamat']; ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3 mt-3 row ms-5">
                             <label for="instansi" class="col-sm-3 me-0 col-form-label">Instansi :</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control <?= isset($errors['instansi']) ? 'is-invalid' : ''; ?>" id="instansi" name="instansi" value="<?= isset($_POST['instansi']) ? $_POST['instansi'] : $data['instansi']; ?>">
-                                <?php if(isset($errors['instansi'])) : ?>
+                                <input type="text"
+                                    class="form-control <?= isset($errors['instansi']) ? 'is-invalid' : ''; ?>"
+                                    id="instansi" name="instansi"
+                                    value="<?= isset($_POST['instansi']) ? $_POST['instansi'] : $data['instansi']; ?>">
+                                <?php if (isset($errors['instansi'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['instansi']; ?>
                                     </div>
@@ -210,17 +237,21 @@
                                 <img src="../img/profil/<?= $data['foto']; ?>" class="img-preview" style="width: 70px;">
                             </div>
                             <div class="col-sm-8">
-                                <?php if($data['foto'] != "default.png") : ?>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" id="delete" data-bs-toggle="modal" data-bs-target="#exampleModal">Hapus Foto</button>
+                                <?php if ($data['foto'] != "default.png"): ?>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" id="delete"
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal">Hapus Foto</button>
                                 <?php endif; ?>
 
                                 <div class="input-group mb-3">
-                                    <input type="file" class="form-control <?= isset($errors['foto']) ? 'is-invalid' : ''; ?>" <?= isset($errors['foto']) ? '' : 'style="border: 1px solid black;"'; ?> id="foto" name="foto" onchange="previewImg()">
-                                    <?php if(isset($errors['foto'])) : ?>
-                                    <div id="validationServer03Feedback" class="invalid-feedback">
-                                        <?= $errors['foto']; ?>
-                                    </div>
-                                <?php endif; ?>
+                                    <input type="file"
+                                        class="form-control <?= isset($errors['foto']) ? 'is-invalid' : ''; ?>"
+                                        <?= isset($errors['foto']) ? '' : 'style="border: 1px solid black;"'; ?>
+                                        id="foto" name="foto" onchange="previewImg()">
+                                    <?php if (isset($errors['foto'])): ?>
+                                        <div id="validationServer03Feedback" class="invalid-feedback">
+                                            <?= $errors['foto']; ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                                 <label for="foto" class="foto">*kosongkan jika tidak ingin mengganti foto</label>
                             </div>
@@ -265,18 +296,20 @@
                         <div class="d-flex justify-content-end me-5">
                             <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
                                 href="../admin/user.php">Kembali</a>
-                            <button type="submit" class="btn btn-primary mt-3 px-4"
-                                style="border-radius: 15px;" name="submit">Update</button>
+                            <button type="submit" class="btn btn-primary mt-3 px-4" style="border-radius: 15px;"
+                                name="submit">Update</button>
                         </div>
                     </form>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Foto</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     Yakin ingin menghapus foto?
@@ -288,7 +321,8 @@
 
                                         <button type="submit" class="btn btn-danger" name="hapus_foto">Hapus</button>
                                     </form>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Tidak</button>
                                 </div>
                             </div>
                         </div>
@@ -309,28 +343,28 @@
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script>
-      function previewImg() {
-        const sampul = document.querySelector('#foto');
-        const imgPreview = document.querySelector('.img-preview');
+        function previewImg() {
+            const sampul = document.querySelector('#foto');
+            const imgPreview = document.querySelector('.img-preview');
 
-        const fileSampul = new FileReader();
-        fileSampul.readAsDataURL(sampul.files[0]);
+            const fileSampul = new FileReader();
+            fileSampul.readAsDataURL(sampul.files[0]);
 
-        fileSampul.onload = function(e) {
-          imgPreview.src = e.target.result;
+            fileSampul.onload = function (e) {
+                imgPreview.src = e.target.result;
+            }
         }
-      }
     </script>
 </body>
 
 </html>
 
-<?php 
-    if(isset($_POST['submit']) || isset($_POST['hapus_foto'])) {
-        
-    } else {
-        $_SESSION = [];
-        session_unset();
-        session_destroy();
-    }
+<?php
+if (isset($_POST['submit']) || isset($_POST['hapus_foto'])) {
+
+} else {
+    $_SESSION = [];
+    session_unset();
+    session_destroy();
+}
 ?>

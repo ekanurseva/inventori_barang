@@ -1,7 +1,7 @@
-<?php 
-    require_once '../controller/TransaksiPembelian.php';
+<?php
+require_once '../controller/TransaksiPembelian.php';
 
-    $data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE status ='Selesai'");
+$data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE status ='Selesai'");
 ?>
 
 <html lang="en">
@@ -36,7 +36,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -47,6 +49,14 @@
                             Manajemen Barang Masuk
                         </h5>
                     </div>
+
+                    <?php
+                    if ($user['level'] === "Manajer") {
+                        echo '<div class="mt-4 "> 
+                                <a href="../admin/laporan.php" class="btn btn-outline-secondary">Kembali</a> 
+                            </div>';
+                    }
+                    ?>
 
                     <div class="mt-4">
                         <table id="example" class="table table-hover text-center">
@@ -61,15 +71,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $i = 1;
-                                    foreach($data_transaksi as $transaksi) :
-                                        $idpemasok = $transaksi['idpemasok'];
-                                        $pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
+                                <?php
+                                $i = 1;
+                                foreach ($data_transaksi as $transaksi):
+                                    $idpemasok = $transaksi['idpemasok'];
+                                    $pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
 
-                                        $idtransaksi = $transaksi['idtransaksi'];
-                                        $barang_masuk = query("SELECT no_bukti, tgl_masuk FROM barang_masuk WHERE idtransaksi = $idtransaksi");
-                                ?>  
+                                    $idtransaksi = $transaksi['idtransaksi'];
+                                    $barang_masuk = query("SELECT no_bukti, tgl_masuk FROM barang_masuk WHERE idtransaksi = $idtransaksi");
+                                    ?>
                                     <tr>
                                         <td>
                                             <?= $i; ?>
@@ -78,16 +88,16 @@
                                             <?= $pemasok['nama']; ?>
                                         </td>
                                         <td>
-                                            <?php if($barang_masuk[0]['no_bukti'] == NULL)  : ?>
+                                            <?php if ($barang_masuk[0]['no_bukti'] == NULL): ?>
                                                 -
-                                            <?php else : ?>
+                                            <?php else: ?>
                                                 <?= $transaksi['kode_transaksi']; ?>
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <?php if($barang_masuk[0]['tgl_masuk'] == NULL)  : ?>
+                                            <?php if ($barang_masuk[0]['tgl_masuk'] == NULL): ?>
                                                 -
-                                            <?php else : ?>
+                                            <?php else: ?>
                                                 <?= date("d-m-Y | H:i:s", strtotime($barang_masuk[0]['tgl_masuk'])); ?>
                                             <?php endif; ?>
                                         </td>
@@ -95,14 +105,15 @@
                                             <?= $transaksi['status']; ?>
                                         </td>
                                         <td>
-                                            <a href="../admin/detail_barang_masuk.php?id=<?= enkripsi($idtransaksi); ?>" class="btn btn-sm btn-primary">
+                                            <a href="../admin/detail_barang_masuk.php?id=<?= enkripsi($idtransaksi); ?>"
+                                                class="btn btn-sm btn-primary">
                                                 Detail
                                             </a>
                                         </td>
                                     </tr>
-                                <?php 
+                                    <?php
                                     $i++;
-                                    endforeach;
+                                endforeach;
                                 ?>
                             </tbody>
                         </table>

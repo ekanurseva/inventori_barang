@@ -1,68 +1,68 @@
-<?php 
-    require_once '../controller/TransaksiPenjualan.php';
-    
-    $user = cari_user();
-    if(isset($_GET['id']) && isset($_GET['dari'])) {
-        $id = dekripsi($_GET['id']);
+<?php
+require_once '../controller/TransaksiPenjualan.php';
 
-        $data = query("SELECT * FROM barang_keluar WHERE idkeluar = '$id'");
+$user = cari_user();
+if (isset($_GET['id']) && isset($_GET['dari'])) {
+    $id = dekripsi($_GET['id']);
+
+    $data = query("SELECT * FROM barang_keluar WHERE idkeluar = '$id'");
 
 
-        if(count($data) == 0) {
-            if($user['level'] == "Admin") {
-                echo "<script>
-                        document.location.href='../admin/detail_pesanan.php?id=". $_GET['dari'] ."';
+    if (count($data) == 0) {
+        if ($user['level'] == "Admin") {
+            echo "<script>
+                        document.location.href='../admin/detail_pesanan.php?id=" . $_GET['dari'] . "';
                     </script>";
-                exit;    
-            } elseif($user['level'] == "User") {
-                echo "<script>
-                        document.location.href='../pelanggan/detail.php?id=". $_GET['dari'] ."';
+            exit;
+        } elseif ($user['level'] == "User") {
+            echo "<script>
+                        document.location.href='../pelanggan/detail.php?id=" . $_GET['dari'] . "';
                     </script>";
-                exit;
-            }
-        } else {
-            $data = $data[0];
+            exit;
+        }
+    } else {
+        $data = $data[0];
 
-            $idbarang = $data['idbarang'];
-            $barang = query("SELECT * FROM barang WHERE idbarang = '$idbarang'")[0];
-            
-            if(isset($_POST['submit'])) {
-                $errors = update($_POST);
+        $idbarang = $data['idbarang'];
+        $barang = query("SELECT * FROM barang WHERE idbarang = '$idbarang'")[0];
 
-                if(is_numeric($errors)) {
-                    if($errors > 1) {
-                        $_SESSION["berhasil"] = "Data Pembelian Berhasil Diubah!";
-                    } else {
-                        $_SESSION["gagal"] = "Data Pembelian Gagal Diubah!";
-                    }
+        if (isset($_POST['submit'])) {
+            $errors = update($_POST);
 
-                    if($user['level'] == "Admin") {
-                        echo "<script>
-                                document.location.href='../admin/detail_pesanan.php?id=". $_GET['dari'] ."';
+            if (is_numeric($errors)) {
+                if ($errors > 1) {
+                    $_SESSION["berhasil"] = "Data Pembelian Berhasil Diubah!";
+                } else {
+                    $_SESSION["gagal"] = "Data Pembelian Gagal Diubah!";
+                }
+
+                if ($user['level'] == "Admin") {
+                    echo "<script>
+                                document.location.href='../admin/detail_pesanan.php?id=" . $_GET['dari'] . "';
                             </script>";
-                        exit;    
-                    } elseif($user['level'] == "User") {
-                        echo "<script>
-                                document.location.href='../pelanggan/detail.php?id=". $_GET['dari'] ."';
+                    exit;
+                } elseif ($user['level'] == "User") {
+                    echo "<script>
+                                document.location.href='../pelanggan/detail.php?id=" . $_GET['dari'] . "';
                             </script>";
-                        exit;
-                    }
+                    exit;
                 }
             }
         }
-    } else {
-        if($user['level'] == "Admin") {
-            echo "<script>
+    }
+} else {
+    if ($user['level'] == "Admin") {
+        echo "<script>
                     document.location.href='../admin/transaksi_pesanan.php';
                 </script>";
-            exit;    
-        } elseif($user['level'] == "User") {
-            echo "<script>
+        exit;
+    } elseif ($user['level'] == "User") {
+        echo "<script>
                     document.location.href='../pelanggan/riwayat.php';
                 </script>";
-            exit;
-        }
+        exit;
     }
+}
 ?>
 
 <html lang="en">
@@ -88,9 +88,9 @@
     <div class="content">
         <!-- navbar -->
         <?php
-        if($user['level'] == "Admin") {
+        if ($user['level'] == "Admin") {
             require_once('../navbar/navbar.php');
-        } elseif($user['level'] == "User") {
+        } elseif ($user['level'] == "User") {
             require_once('../navbar/navbar_pelanggan.php');
         }
         ?>
@@ -100,15 +100,15 @@
             <div class="d-flex">
 
                 <?php
-                    if($user['level'] == "Admin") {
-                        require_once('../navbar/sidebar.php');
-                    }
+                if ($user['level'] == "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- konten -->
                 <div class="contents px-3 py-3">
                     <div class="box1">
                         <h5 class="text-dark text-center mb-0 ms-4 fw-bold">
-                            Detail Transaksi Permintaan Barang
+                            Transaksi Penjualan Barang
                         </h5>
                     </div>
 
@@ -127,11 +127,16 @@
                             </div>
 
                             <div class="col-4 mt-2">
-                                <label class="fw-bold"><?= $barang['nama_barang']; ?></label>
+                                <label class="fw-bold">
+                                    <?= $barang['nama_barang']; ?>
+                                </label>
                             </div>
                             <div class="col-5 mt-2">
-                                <input type="number" class="form-control <?= isset($errors['qty']) ? 'is-invalid' : ''; ?>" placeholder="masukkan jumlah" id="qty" name="qty" value="<?= isset($_POST['qty']) ? $_POST['qty'] : $data['qty']; ?>">
-                                <?php if(isset($errors['qty'])) : ?>
+                                <input type="number"
+                                    class="form-control <?= isset($errors['qty']) ? 'is-invalid' : ''; ?>"
+                                    placeholder="masukkan jumlah" id="qty" name="qty"
+                                    value="<?= isset($_POST['qty']) ? $_POST['qty'] : $data['qty']; ?>">
+                                <?php if (isset($errors['qty'])): ?>
                                     <div id="validationServer03Feedback" class="invalid-feedback">
                                         <?= $errors['qty']; ?>
                                     </div>
@@ -141,15 +146,15 @@
 
 
                         <div class="d-flex justify-content-end me-5">
-                            <?php if($user['level'] == "Admin") : ?>
+                            <?php if ($user['level'] == "Admin"): ?>
                                 <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
                                     href="../admin/detail_pesanan.php?id=<?= $_GET['dari']; ?>">Kembali</a>
-                            <?php elseif($user['level'] == "User") : ?>
+                            <?php elseif ($user['level'] == "User"): ?>
                                 <a class="btn btn-secondary mt-3 px-4 me-3" style="border-radius: 15px;"
                                     href="../pelanggan/detail.php?id=<?= $_GET['dari']; ?>">Kembali</a>
                             <?php endif; ?>
-                            <button type="submit" class="btn btn-primary mt-3 px-4"
-                                style="border-radius: 15px;" name="submit">Update</button>
+                            <button type="submit" class="btn btn-primary mt-3 px-4" style="border-radius: 15px;"
+                                name="submit">Update</button>
                         </div>
                     </form>
                 </div>

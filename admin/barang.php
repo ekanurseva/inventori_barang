@@ -50,7 +50,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -62,19 +64,21 @@
                         </h5>
                     </div>
 
-                    <div class="mt-4 ">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <a class="btn btn-primary" href="../insert/barang.php">Tambah Data Barang</a>
-                            </div>
-                            <!-- <div class="col-sm-4">
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                                    data-bs-target="#bahan_baku">
-                                    Tambah Bahan Baku
-                                </button>
-                            </div> -->
+                    <?php
+                    if ($user['level'] === "Manajer") {
+                        echo '<div class="mt-4 "> 
+                                <a href="../admin/laporan.php" class="btn btn-outline-secondary">Kembali</a> 
+                            </div>';
+                    } else{
+                        echo '
+                        <div class="mt-4 ">
+                            <a class="btn btn-primary" href="../insert/barang.php">Tambah Data Barang</a>
                         </div>
-                    </div>
+                        ';
+                    }
+                    ?>
+
+                    
 
                     <?php if(isset($_SESSION['berhasil'])) : ?>
                         <div class="my-3">

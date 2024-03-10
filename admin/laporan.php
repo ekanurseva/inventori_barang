@@ -1,10 +1,11 @@
-<?php 
-    require_once '../controller/MainController.php';
+<?php
+require_once '../controller/MainController.php';
 
-    $barang_masuk = query("SELECT * FROM transaksi_pembelian WHERE status ='Selesai'");
-    $barang_keluar = query("SELECT * FROM transaksi_penjualan WHERE status ='Selesai'");
-    $permintaan_barang = query("SELECT * FROM transaksi_pembelian");
-    $barang = query("SELECT * FROM barang");
+$barang_masuk = query("SELECT * FROM transaksi_pembelian WHERE status ='Selesai'");
+$barang_keluar = query("SELECT * FROM transaksi_penjualan WHERE status ='Selesai'");
+$permintaan_barang = query("SELECT * FROM transaksi_pembelian");
+$barang = query("SELECT * FROM barang");
+$user = cari_user();
 
 ?>
 
@@ -40,7 +41,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -52,6 +55,14 @@
                         </h5>
                     </div>
 
+                    <?php
+                    if ($user['level'] === "Manajer") {
+                        echo '<div class="mt-4 "> 
+                                <a href="../manajer/index.php" class="btn btn-outline-secondary">Kembali</a> 
+                            </div>';
+                    }
+                    ?>
+
                     <div class="mt-4 ">
                         <div class="row">
                             <div class="col-sm-4">
@@ -59,7 +70,9 @@
                                     <h6 class="card-header fw-bold">Laporan Barang Masuk</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang Masuk</h6>
-                                        <p class="card-text text-center"><?= count($barang_masuk); ?></p>
+                                        <p class="card-text text-center">
+                                            <?= count($barang_masuk); ?>
+                                        </p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -84,7 +97,9 @@
                                     <h6 class="card-header fw-bold">Laporan Barang Keluar</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang Keluar</h6>
-                                        <p class="card-text text-center"><?= count($barang_keluar); ?></p>
+                                        <p class="card-text text-center">
+                                            <?= count($barang_keluar); ?>
+                                        </p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -109,7 +124,9 @@
                                     <h6 class="card-header fw-bold">Laporan Permintaan Barang</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Permintaan Barang</h6>
-                                        <p class="card-text text-center"><?= count($permintaan_barang); ?></p>
+                                        <p class="card-text text-center">
+                                            <?= count($permintaan_barang); ?>
+                                        </p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -137,7 +154,9 @@
                                     <h6 class="card-header fw-bold">Laporan Daftar Barang</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang</h6>
-                                        <p class="card-text text-center"><?= count($barang); ?></p>
+                                        <p class="card-text text-center">
+                                            <?= count($barang); ?>
+                                        </p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -161,7 +180,9 @@
                                     <h6 class="card-header fw-bold">Laporan Stok Barang</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang</h6>
-                                        <p class="card-text text-center"><?= count($barang); ?></p>
+                                        <p class="card-text text-center">
+                                            <?= count($barang); ?>
+                                        </p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -311,7 +332,7 @@
     </script>
 
     <script>
-        document.getElementById('submitBtn').addEventListener('click', function() {
+        document.getElementById('submitBtn').addEventListener('click', function () {
             var dari = document.getElementById('dari').value;
             var sampai = document.getElementById('sampai').value;
             var ke = document.getElementById('ke').value;
@@ -321,7 +342,7 @@
             window.open(url, '_blank');
         });
 
-        document.getElementById('submitBtn2').addEventListener('click', function() {
+        document.getElementById('submitBtn2').addEventListener('click', function () {
             var dari2 = document.getElementById('dari2').value;
             var sampai2 = document.getElementById('sampai2').value;
             var ke2 = document.getElementById('ke2').value;
@@ -331,7 +352,7 @@
             window.open(url, '_blank');
         });
 
-        document.getElementById('submitBtn3').addEventListener('click', function() {
+        document.getElementById('submitBtn3').addEventListener('click', function () {
             var dari3 = document.getElementById('dari3').value;
             var sampai3 = document.getElementById('sampai3').value;
             var ke3 = document.getElementById('ke3').value;

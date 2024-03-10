@@ -1,7 +1,7 @@
-<?php 
-    require_once '../controller/TransaksiPenjualan.php';
+<?php
+require_once '../controller/TransaksiPenjualan.php';
 
-    $data_transaksi = query("SELECT * FROM transaksi_penjualan WHERE status = 'Selesai'");
+$data_transaksi = query("SELECT * FROM transaksi_penjualan WHERE status = 'Selesai'");
 ?>
 
 <html lang="en">
@@ -36,7 +36,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -48,6 +50,13 @@
                         </h5>
                     </div>
 
+                    <?php
+                    if ($user['level'] === "Manajer") {
+                        echo '<div class="mt-4 "> 
+                                <a href="../admin/laporan.php" class="btn btn-outline-secondary">Kembali</a> 
+                            </div>';
+                    }
+                    ?>
                     <div class="mt-4">
                         <table id="example" class="table table-hover text-center">
                             <thead>
@@ -61,20 +70,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $i = 1;
-                                    foreach($data_transaksi as $transaksi) :
-                                        $iduser = $transaksi['idpelanggan'];
-                                        $nama_pelanggan = query("SELECT nama FROM user WHERE iduser = '$iduser'")[0];
+                                <?php
+                                $i = 1;
+                                foreach ($data_transaksi as $transaksi):
+                                    $iduser = $transaksi['idpelanggan'];
+                                    $nama_pelanggan = query("SELECT nama FROM user WHERE iduser = '$iduser'")[0];
 
-                                        $idtransaksi = $transaksi['idtransaksi'];
-                                        $data_keluar = query("SELECT * FROM barang_keluar JOIN barang ON barang_keluar.idbarang = barang.idbarang WHERE idtransaksi = '$idtransaksi'");
+                                    $idtransaksi = $transaksi['idtransaksi'];
+                                    $data_keluar = query("SELECT * FROM barang_keluar JOIN barang ON barang_keluar.idbarang = barang.idbarang WHERE idtransaksi = '$idtransaksi'");
 
-                                        $harga = 0;
-                                        foreach($data_keluar as $keluar) {
-                                            $harga += $keluar['qty'] * $keluar['harga'];
-                                        }
-                                ?>
+                                    $harga = 0; foreach ($data_keluar as $keluar) {
+                                        $harga += $keluar['qty'] * $keluar['harga'];
+                                    }
+                                    ?>
                                     <tr>
                                         <td>
                                             <?= $i; ?>
@@ -86,24 +94,26 @@
                                             <?= $nama_pelanggan['nama']; ?>
                                         </td>
                                         <td>
-                                            <?php if($data_keluar[0]['tgl_keluar'] != null) : ?>
+                                            <?php if ($data_keluar[0]['tgl_keluar'] != null): ?>
                                                 <?= date("d-m-Y | H:i:s", strtotime($data_keluar[0]['tgl_keluar'])); ?>
-                                            <?php else : ?>
+                                            <?php else: ?>
                                                 -
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            Rp <?= number_format($harga, 0, ',', '.'); ?>
+                                            Rp
+                                            <?= number_format($harga, 0, ',', '.'); ?>
                                         </td>
                                         <td>
-                                            <a href="../admin/detail_barang_keluar.php?id=<?= enkripsi($transaksi['idtransaksi']); ?>" class="btn btn-sm btn-primary">
+                                            <a href="../admin/detail_barang_keluar.php?id=<?= enkripsi($transaksi['idtransaksi']); ?>"
+                                                class="btn btn-sm btn-primary">
                                                 Detail
                                             </a>
                                         </td>
                                     </tr>
-                                <?php 
+                                    <?php
                                     $i++;
-                                    endforeach;
+                                endforeach;
                                 ?>
                             </tbody>
                         </table>

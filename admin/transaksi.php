@@ -1,8 +1,8 @@
-<?php 
-    require_once '../controller/TransaksiPembelian.php';
+<?php
+require_once '../controller/TransaksiPembelian.php';
 
-    $data_pemasok = query("SELECT * FROM user WHERE level = 'Pemasok'");
-    $data_transaksi = query("SELECT * FROM transaksi_pembelian ORDER BY tgl_transaksi DESC");
+$data_pemasok = query("SELECT * FROM user WHERE level = 'Pemasok'");
+$data_transaksi = query("SELECT * FROM transaksi_pembelian ORDER BY tgl_transaksi DESC");
 ?>
 
 <html lang="en">
@@ -37,7 +37,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -49,22 +51,34 @@
                         </h5>
                     </div>
 
-                    <div class="mt-4 ">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pesanan">
+                    <?php
+                    if ($user['level'] === "Manajer") {
+                        echo '<div class="mt-4 "> 
+                                <a href="../admin/laporan.php" class="btn btn-outline-secondary">Kembali</a> 
+                            </div>';
+                    } else {
+                        echo '
+                        <div class="mt-4 ">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pesanan">
                             Buat Permintaan Barang
-                        </button>
-                    </div>
+                            </button>
+                        </div>
+                        ';
+                    }
+                    ?>
 
-                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                    <?php if (isset($_SESSION['berhasil'])): ?>
                         <div class="my-3">
                             <div class="alert alert-success" role="alert">
-                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                                <i class="bi bi-check-circle"></i>
+                                <?= $_SESSION['berhasil']; ?>
                             </div>
                         </div>
-                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                    <?php elseif (isset($_SESSION['gagal'])): ?>
                         <div class="my-3">
                             <div class="alert alert-danger" role="alert">
-                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                                <i class="bi bi-x-circle"></i>
+                                <?= $_SESSION['gagal']; ?>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -81,12 +95,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $i = 1;
-                                    foreach($data_transaksi as $transaksi) :
-                                        $idpemasok = $transaksi['idpemasok'];
-                                        $pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
-                                ?>  
+                                <?php
+                                $i = 1;
+                                foreach ($data_transaksi as $transaksi):
+                                    $idpemasok = $transaksi['idpemasok'];
+                                    $pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
+                                    ?>
                                     <tr>
                                         <td>
                                             <?= $i; ?>
@@ -101,14 +115,15 @@
                                             <?= $transaksi['status']; ?>
                                         </td>
                                         <td>
-                                            <a href="../admin/detail_transaksi.php?id=<?= enkripsi($transaksi['idtransaksi']); ?>" class="btn btn-sm btn-primary">
+                                            <a href="../admin/detail_transaksi.php?id=<?= enkripsi($transaksi['idtransaksi']); ?>"
+                                                class="btn btn-sm btn-primary">
                                                 Detail
                                             </a>
                                         </td>
                                     </tr>
-                                <?php 
+                                    <?php
                                     $i++;
-                                    endforeach;
+                                endforeach;
                                 ?>
                             </tbody>
                         </table>
@@ -137,7 +152,7 @@
                                         <select id="kriteria" class="form-select" style="border: 1px solid black;"
                                             aria-label="Default select example" name="pemasok">
                                             <option value="" selected hidden>--Pilih Pemasok--</option>
-                                            <?php foreach($data_pemasok as $pemasok) : ?>
+                                            <?php foreach ($data_pemasok as $pemasok): ?>
                                                 <option value="<?= enkripsi($pemasok['iduser']); ?>"><?= $pemasok['nama']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
@@ -176,10 +191,10 @@
 
 </html>
 
-<?php 
-    if(!isset($_POST['iduser'])) {
-        $_SESSION = [];
-        session_unset();
-        session_destroy();
-    }
+<?php
+if (!isset($_POST['iduser'])) {
+    $_SESSION = [];
+    session_unset();
+    session_destroy();
+}
 ?>

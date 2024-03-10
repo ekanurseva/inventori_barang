@@ -1,20 +1,21 @@
-<?php 
-    require_once '../controller/UserController.php';
+<?php
+require_once '../controller/UserController.php';
 
-    $data_user = query("SELECT * FROM user");
+$data_user = query("SELECT * FROM user");
+$user = cari_user();
 
-    if(isset($_POST['iduser'])) {
-        if(delete($_POST) > 0 ) {
-            $_SESSION["berhasil"] = "User Berhasil Dihapus!";
-        } else {
-            $_SESSION["gagal"] = "User Gagal Dihapus!";
-        }
-        echo "
+if (isset($_POST['iduser'])) {
+    if (delete($_POST) > 0) {
+        $_SESSION["berhasil"] = "User Berhasil Dihapus!";
+    } else {
+        $_SESSION["gagal"] = "User Gagal Dihapus!";
+    }
+    echo "
             <script>
                 document.location.href='user.php';
             </script>
         ";
-    }
+}
 ?>
 
 <html lang="en">
@@ -49,7 +50,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -61,20 +64,41 @@
                         </h5>
                     </div>
 
-                    <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../insert/user.php">Tambah Data</a>
-                    </div>
 
-                    <?php if(isset($_SESSION['berhasil'])) : ?>
-                        <div class="my-3">
-                            <div class="alert alert-success" role="alert">
-                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                    <?php
+                    if ($user['level'] === "Admin") {
+                        echo '<div class="mt-4 "> 
+                            <a class="btn btn-primary" href="../insert/user.php">Tambah Data</a> 
+                            </div>';
+                    } else {
+                        echo '
+                        <div class="mt-4 ">
+                            <div class="row">
+                                <div class="col-1">
+                                    <a href="../manajer/index.php" class="btn btn-outline-secondary">Kembali</a>
+                                </div>
+                                <div class="col-4">
+                                    <a class="btn btn-primary" href="../insert/user.php">Tambah Data</a>
+                                </div>
                             </div>
                         </div>
-                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                        ';
+                    }
+                    ?>
+
+
+                    <?php if (isset($_SESSION['berhasil'])): ?>
+                        <div class="my-3">
+                            <div class="alert alert-success" role="alert">
+                                <i class="bi bi-check-circle"></i>
+                                <?= $_SESSION['berhasil']; ?>
+                            </div>
+                        </div>
+                    <?php elseif (isset($_SESSION['gagal'])): ?>
                         <div class="my-3">
                             <div class="alert alert-danger" role="alert">
-                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                                <i class="bi bi-x-circle"></i>
+                                <?= $_SESSION['gagal']; ?>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -93,10 +117,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $i = 1;
-                                    foreach($data_user as $daus) :
-                                ?>
+                                <?php
+                                $i = 1;
+                                foreach ($data_user as $daus):
+                                    ?>
                                     <tr>
                                         <td>
                                             <?= $i; ?>
@@ -117,31 +141,35 @@
                                             <?= $daus['level']; ?>
                                         </td>
                                         <td>
-                                            <a href="../edit/user.php?id=<?= enkripsi($daus['iduser']); ?>" class="btn btn-sm btn-primary">
+                                            <a href="../edit/user.php?id=<?= enkripsi($daus['iduser']); ?>"
+                                                class="btn btn-sm btn-primary">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             |
-                                            <button type="button" class="btn  btn-danger btn-sm" id="delete" data-bs-toggle="modal" data-bs-target="#delete_<?= $daus['iduser']; ?>">
+                                            <button type="button" class="btn  btn-danger btn-sm" id="delete"
+                                                data-bs-toggle="modal" data-bs-target="#delete_<?= $daus['iduser']; ?>">
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                <?php 
+                                    <?php
                                     $i++;
-                                    endforeach;
+                                endforeach;
                                 ?>
                             </tbody>
                         </table>
                     </div>
 
-                    <?php foreach($data_user as $du) : ?>
+                    <?php foreach ($data_user as $du): ?>
                         <!-- Modal -->
-                        <div class="modal fade" id="delete_<?= $du['iduser']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="delete_<?= $du['iduser']; ?>" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus User</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         Yakin ingin menghapus data user?
@@ -153,7 +181,8 @@
 
                                             <button type="submit" class="btn btn-danger" name="hapus_foto">Hapus</button>
                                         </form>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Tidak</button>
                                     </div>
                                 </div>
                             </div>
@@ -184,10 +213,10 @@
 
 </html>
 
-<?php 
-    if(!isset($_POST['iduser'])) {
-        $_SESSION = [];
-        session_unset();
-        session_destroy();
-    }
+<?php
+if (!isset($_POST['iduser'])) {
+    $_SESSION = [];
+    session_unset();
+    session_destroy();
+}
 ?>

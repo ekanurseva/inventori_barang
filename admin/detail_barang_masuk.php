@@ -1,29 +1,29 @@
-<?php 
-    require_once '../controller/TransaksiPembelian.php';
+<?php
+require_once '../controller/TransaksiPembelian.php';
 
-    if(isset($_GET['id'])) {
-        $id = dekripsi($_GET['id']);
+if (isset($_GET['id'])) {
+    $id = dekripsi($_GET['id']);
 
-        $transaksi = query("SELECT * FROM transaksi_pembelian WHERE idtransaksi = '$id'");
-        
-        if(count($transaksi) == 0) {
-            echo "<script>
+    $transaksi = query("SELECT * FROM transaksi_pembelian WHERE idtransaksi = '$id'");
+
+    if (count($transaksi) == 0) {
+        echo "<script>
             document.location.href='transaksi.php';
             </script>";
-            exit;    
-        } else {
-            $transaksi = $transaksi[0];
-            $data_barang = query("SELECT * FROM barang_masuk WHERE idtransaksi = '$id'");
-
-            $idpemasok = $transaksi['idpemasok'];
-            $nama_pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
-        }
+        exit;
     } else {
-        echo "<script>
+        $transaksi = $transaksi[0];
+        $data_barang = query("SELECT * FROM barang_masuk WHERE idtransaksi = '$id'");
+
+        $idpemasok = $transaksi['idpemasok'];
+        $nama_pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
+    }
+} else {
+    echo "<script>
                 document.location.href='transaksi.php';
             </script>";
-        exit;
-    }
+    exit;
+}
 ?>
 
 <html lang="en">
@@ -58,7 +58,9 @@
             <div class="d-flex">
                 <!-- sidebar -->
                 <?php
-                require_once('../navbar/sidebar.php');
+                if ($user['level'] === "Admin") {
+                    require_once('../navbar/sidebar.php');
+                }
                 ?>
                 <!-- sidebar selesai -->
 
@@ -76,25 +78,33 @@
                                 <a href="../admin/barang_masuk.php" class="btn btn-outline-secondary btn-sm">Kembali</a>
                             </div>
                             <div class="col-10">
-                                <h6>Nama Pemasok : <b><?= $nama_pemasok['nama']; ?></b></h6>
+                                <h6>Nama Pemasok : <b>
+                                        <?= $nama_pemasok['nama']; ?>
+                                    </b></h6>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-sm-4">
-                                Status : <b><?= $transaksi['status']; ?></b>
+                                Status : <b>
+                                    <?= $transaksi['status']; ?>
+                                </b>
                             </div>
                             <div class="col-sm-4">
-                                <?php if($data_barang[0]['no_bukti'] == NULL) :?>
+                                <?php if ($data_barang[0]['no_bukti'] == NULL): ?>
                                     <h6>-</h6>
-                                <?php else : ?>
-                                    <h6><?= $data_barang[0]['no_bukti']; ?></h6>
+                                <?php else: ?>
+                                    <h6>
+                                        <?= $data_barang[0]['no_bukti']; ?>
+                                    </h6>
                                 <?php endif; ?>
                             </div>
                             <div class="col-sm-4">
-                                <?php if($data_barang[0]['tgl_masuk'] == NULL) :?>
+                                <?php if ($data_barang[0]['tgl_masuk'] == NULL): ?>
                                     <h6>-</h6>
-                                <?php else : ?>
-                                    <h6><?= date("d-m-Y | H:i:s", strtotime($data_barang[0]['tgl_masuk'])); ?></h6>
+                                <?php else: ?>
+                                    <h6>
+                                        <?= date("d-m-Y | H:i:s", strtotime($data_barang[0]['tgl_masuk'])); ?>
+                                    </h6>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -111,16 +121,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $i = 1;
-                                    $total = 0;
-                                    foreach($data_barang as $barang) :
-                                        $idbarang = $barang['idbahan'];
-                                        $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = $idbarang")[0];
+                                <?php
+                                $i = 1;
+                                $total = 0;
+                                foreach ($data_barang as $barang):
+                                    $idbarang = $barang['idbahan'];
+                                    $bahan = query("SELECT * FROM bahan_pemasok WHERE idbahan = $idbarang")[0];
 
-                                        $harga = $bahan['harga'] * $barang['qty'];
-                                        $total += $harga;
-                                ?>
+                                    $harga = $bahan['harga'] * $barang['qty'];
+                                    $total += $harga;
+                                    ?>
                                     <tr>
                                         <td>
                                             <?= $i; ?>
@@ -132,19 +142,21 @@
                                             <?= $barang['qty']; ?>
                                         </td>
                                         <td>
-                                            Rp <?= number_format($harga, 0, ',', '.'); ?>
+                                            Rp
+                                            <?= number_format($harga, 0, ',', '.'); ?>
                                         </td>
                                     </tr>
-                                <?php 
+                                    <?php
                                     $i++;
-                                    endforeach;
+                                endforeach;
                                 ?>
                                 <tr>
                                     <th>Total Pembayaran</th>
                                     <th></th>
                                     <th></th>
                                     <th>
-                                        Rp <?= number_format($total, 0, ',', '.'); ?>
+                                        Rp
+                                        <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
                                 </tr>
                             </tbody>

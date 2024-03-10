@@ -1,39 +1,39 @@
-<?php 
-    require_once '../controller/TransaksiPenjualan.php';
-    validasi();
+<?php
+require_once '../controller/TransaksiPenjualan.php';
+validasi();
 
-    if(isset($_GET['id'])) {
-        $id = dekripsi($_GET['id']);
+if (isset($_GET['id'])) {
+    $id = dekripsi($_GET['id']);
 
-        $transaksi = query("SELECT * FROM transaksi_penjualan WHERE idtransaksi = '$id'");
-        
-        if(count($transaksi) == 0) {
-            echo "<script>
+    $transaksi = query("SELECT * FROM transaksi_penjualan WHERE idtransaksi = '$id'");
+
+    if (count($transaksi) == 0) {
+        echo "<script>
                     document.location.href='riwayat.php';
                 </script>";
-            exit;    
-        } else {
-            $transaksi = $transaksi[0];
-            $data_barang = query("SELECT * FROM barang_keluar JOIN barang ON barang_keluar.idbarang = barang.idbarang WHERE idtransaksi = '$id'");
-
-            $idpelanggan = $transaksi['idpelanggan'];
-            $nama_pelanggan = query("SELECT nama FROM user WHERE iduser = $idpelanggan")[0];
-
-            if(isset($_POST['delete'])) {
-                if(delete($_POST) > 0 ) {
-                    $_SESSION["berhasil"] = "Barang Pesanan Berhasil Dihapus!";
-                } else {
-                    $_SESSION["gagal"] = "Barang Pesanan Gagal Dihapus!";
-                }
-                header("Refresh:0");
-            }
-        }
+        exit;
     } else {
-        echo "<script>
+        $transaksi = $transaksi[0];
+        $data_barang = query("SELECT * FROM barang_keluar JOIN barang ON barang_keluar.idbarang = barang.idbarang WHERE idtransaksi = '$id'");
+
+        $idpelanggan = $transaksi['idpelanggan'];
+        $nama_pelanggan = query("SELECT nama FROM user WHERE iduser = $idpelanggan")[0];
+
+        if (isset($_POST['delete'])) {
+            if (delete($_POST) > 0) {
+                $_SESSION["berhasil"] = "Barang Pesanan Berhasil Dihapus!";
+            } else {
+                $_SESSION["gagal"] = "Barang Pesanan Gagal Dihapus!";
+            }
+            header("Refresh:0");
+        }
+    }
+} else {
+    echo "<script>
                 document.location.href='riwayat.php';
             </script>";
-        exit;
-    }
+    exit;
+}
 ?>
 
 <html lang="en">
@@ -75,32 +75,44 @@
 
                     <div class="text-center mt-4">
                         <div class="row">
-                            <div class="col-sm-4">
-                                Status : <b><?= $transaksi['status']; ?></b>
+                            <div class="col-sm-1">
+                                <a href="../pelanggan/riwayat.php" class="btn btn-sm btn-outline-secondary">Kembali</a>
+                            </div>
+                            <div class="col-sm-3">
+                                Status : <b>
+                                    <?= $transaksi['status']; ?>
+                                </b>
                             </div>
                             <div class="col-sm-4">
-                                <h6><?= $transaksi['kode_transaksi']; ?></h6>
+                                <h6>
+                                    <?= $transaksi['kode_transaksi']; ?>
+                                </h6>
                             </div>
                             <div class="col-sm-4">
-                                <h6><?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?></h6>
+                                <h6>
+                                    <?= date("d-m-Y | H:i:s", strtotime($transaksi['tgl_transaksi'])); ?>
+                                </h6>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4 ">
-                        <a class="btn btn-primary" href="../pelanggan/index.php?dari=<?= $_GET['id']; ?>">Tambah Pesanan</a>
+                        <a class="btn btn-primary" href="../pelanggan/index.php?dari=<?= $_GET['id']; ?>">Tambah
+                            Pesanan</a>
                     </div>
 
-                    <?php if(isset($_SESSION['berhasil'])) : ?>
+                    <?php if (isset($_SESSION['berhasil'])): ?>
                         <div class="my-3">
                             <div class="alert alert-success" role="alert">
-                                <i class="bi bi-check-circle"></i> <?= $_SESSION['berhasil']; ?>
+                                <i class="bi bi-check-circle"></i>
+                                <?= $_SESSION['berhasil']; ?>
                             </div>
                         </div>
-                    <?php elseif(isset($_SESSION['gagal'])) : ?>
+                    <?php elseif (isset($_SESSION['gagal'])): ?>
                         <div class="my-3">
                             <div class="alert alert-danger" role="alert">
-                                <i class="bi bi-x-circle"></i> <?= $_SESSION['gagal']; ?>
+                                <i class="bi bi-x-circle"></i>
+                                <?= $_SESSION['gagal']; ?>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -117,13 +129,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $i = 1;
-                                    $total = 0;
-                                    foreach($data_barang as $barang) :
-                                        $jumlah = $barang['qty'] * $barang['harga'];
-                                        $total += $jumlah;
-                                ?>
+                                <?php
+                                $i = 1;
+                                $total = 0;
+                                foreach ($data_barang as $barang):
+                                    $jumlah = $barang['qty'] * $barang['harga'];
+                                    $total += $jumlah;
+                                    ?>
                                     <tr>
                                         <td>
                                             <?= $i; ?>
@@ -135,28 +147,32 @@
                                             <?= $barang['qty']; ?>
                                         </td>
                                         <td>
-                                            Rp <?= number_format($jumlah, 0, ',', '.'); ?>
+                                            Rp
+                                            <?= number_format($jumlah, 0, ',', '.'); ?>
                                         </td>
                                         <td>
-                                            <a href="../edit/pesanan.php?id=<?= enkripsi($barang['idkeluar']); ?>&dari=<?= $_GET['id']; ?>" class="btn btn-sm btn-primary">
+                                            <a href="../edit/pesanan.php?id=<?= enkripsi($barang['idkeluar']); ?>&dari=<?= $_GET['id']; ?>"
+                                                class="btn btn-sm btn-primary">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             |
-                                            <button type="button" class="btn  btn-danger btn-sm" id="delete" data-bs-toggle="modal" data-bs-target="#delete_<?= $barang['idkeluar']; ?>">
+                                            <button type="button" class="btn  btn-danger btn-sm" id="delete"
+                                                data-bs-toggle="modal" data-bs-target="#delete_<?= $barang['idkeluar']; ?>">
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                <?php 
+                                    <?php
                                     $i++;
-                                    endforeach;
+                                endforeach;
                                 ?>
                                 <tr>
                                     <th>Total Pembayaran</th>
                                     <td></td>
                                     <td></td>
                                     <th>
-                                        Rp Rp <?= number_format($total, 0, ',', '.'); ?>
+                                        Rp Rp
+                                        <?= number_format($total, 0, ',', '.'); ?>
                                     </th>
                                     <td></td>
                                 </tr>
@@ -166,23 +182,25 @@
                 </div>
                 <!-- konten selesai -->
 
-                <?php foreach($data_barang as $dabar) : ?>
+                <?php foreach ($data_barang as $dabar): ?>
                     <!-- Modal -->
-                    <div class="modal fade" id="delete_<?= $dabar['idkeluar']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="delete_<?= $dabar['idkeluar']; ?>" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Barang Pesanan</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     Yakin ingin menghapus data barang pesanan ini?
                                 </div>
                                 <div class="modal-footer">
                                     <form action="" method="post">
-                                        <input type="hidden" name="idkeluar" value="<?= $dabar['idkeluar']; ?>">                                    
-                                        <input type="hidden" name="idbarang" value="<?= $dabar['idbarang']; ?>">                                    
-                                        <input type="hidden" name="qty" value="<?= $dabar['qty']; ?>">                                    
+                                        <input type="hidden" name="idkeluar" value="<?= $dabar['idkeluar']; ?>">
+                                        <input type="hidden" name="idbarang" value="<?= $dabar['idbarang']; ?>">
+                                        <input type="hidden" name="qty" value="<?= $dabar['qty']; ?>">
 
                                         <button type="submit" class="btn btn-danger" name="delete">Hapus</button>
                                     </form>
@@ -215,12 +233,12 @@
 
 </html>
 
-<?php 
-    if(isset($_POST['submit']) || isset($_POST['delete'])) {
-        
-    } else {
-        $_SESSION = [];
-        session_unset();
-        session_destroy();
-    }
+<?php
+if (isset($_POST['submit']) || isset($_POST['delete'])) {
+
+} else {
+    $_SESSION = [];
+    session_unset();
+    session_destroy();
+}
 ?>
