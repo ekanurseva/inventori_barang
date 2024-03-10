@@ -1,5 +1,9 @@
 <?php
 require_once '../vendor/autoload.php'; // Mengimpor DomPDF
+require_once '../controller/MainController.php';
+
+$data_barang = query("SELECT * FROM barang");
+$i = 1;
 
 use Dompdf\Dompdf;
 
@@ -62,17 +66,26 @@ $html = '<!DOCTYPE html>
                 <th>KETERANGAN</th>
             </tr>';
 
+foreach($data_barang as $barang) {
+
 $html .= '<tr>
-                            <td>1</td>
-                            <td>Es Cincau</td>
-                            <td>Happy Es</td>
-                            <td>Merk Barang</td>
-                            <td>A</td>
-                            <td>1</td>
-                            <td>Rp 5.000</td>
-                            <td>-</td>
-                        </tr>';
-'</table>
+                            <td>' . $i . '</td>
+                            <td>' . $barang['nama_barang'] .'</td>
+                            <td>' . $barang['kategori'] . '</td>
+                            <td>' . $barang['merk'] . '</td>
+                            <td>' . $barang['gudang'] .'</td>
+                            <td>' . $barang['rak'] .'</td>
+                            <td>Rp ' . number_format($barang['harga'], 0, ',' , '.') .'</td>';
+
+                            if($barang['keterangan'] == "") {
+                                $html .= '<td>-</td>';
+                            } else {
+                                $html .= '<td>' . $barang['keterangan'] . '</td>';
+                            }
+                        $html .= '</tr>';
+    $i++;                        
+}
+$html .= '</table>
 
         </body>
         </html>';

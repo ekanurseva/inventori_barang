@@ -1,3 +1,29 @@
+<?php 
+    require_once '../controller/UserController.php';
+
+    if(isset($_GET['id'])) {
+        $id = dekripsi($_GET['id']);
+
+        $pemasok = query("SELECT * FROM user WHERE iduser = '$id'");
+        
+        if(count($pemasok) == 0) {
+            echo "<script>
+                    document.location.href='pemasok.php';
+                </script>";
+            exit;    
+        } else {
+            $pemasok = $pemasok[0];
+            
+            $data_bahan = query("SELECT * FROM bahan_pemasok WHERE idpemasok = $id");
+        }
+    } else {
+        echo "<script>
+                document.location.href='pemasok.php';
+            </script>";
+        exit;
+    }
+?>
+
 <html lang="en">
 
 <head>
@@ -52,11 +78,11 @@
                                 <h6 class="fw-bold">No Handphone</h6>
                             </div>
                             <div class="col-sm-4">
-                                <h6 class="fw-bold">: Nurhayali</h6>
-                                <h6 class="fw-bold">: PT. Jaya</h6>
-                                <h6 class="fw-bold">: nurhayali@gmail.com</h6>
-                                <h6 class="fw-bold">: Jl. Jalan label dilsaoad</h6>
-                                <h6 class="fw-bold">: 08921738913S</h6>
+                                <h6 class="fw-bold">: <?= $pemasok['nama']; ?></h6>
+                                <h6 class="fw-bold">: <?= $pemasok['instansi']; ?></h6>
+                                <h6 class="fw-bold">: <?= $pemasok['email']; ?></h6>
+                                <h6 class="fw-bold">: <?= $pemasok['alamat']; ?></h6>
+                                <h6 class="fw-bold">: <?= $pemasok['telepon']; ?></h6>
                             </div>
                         </div>
                     </div>
@@ -67,23 +93,35 @@
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Nama Barang</th>
                                     <th class="text-center" scope="col">Stok</th>
-                                    <th class="text-center" scope="col">Satuan</th>
+                                    <th class="text-center" scope="col">Harga</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        Tepung
-                                    </td>
-                                    <td>
-                                        50
-                                    </td>
-                                    <td>
-                                        Dus
-                                    </td>
-                                </tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($data_bahan as $bahan) :
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $bahan['nama_bahan']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $bahan['stok']; ?> <?= $bahan['satuan']; ?>
+                                        </td>
+                                        <td>
+                                            Rp. <?= number_format($bahan['harga'], 0, ',', '.'); ?>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>

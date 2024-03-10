@@ -1,7 +1,7 @@
 <?php 
     require_once '../controller/TransaksiPenjualan.php';
 
-    $data_transaksi = query("SELECT * FROM transaksi_penjualan");
+    $data_transaksi = query("SELECT * FROM transaksi_penjualan ORDER BY tgl_transaksi DESC");
 ?>
 
 

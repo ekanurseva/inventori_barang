@@ -5,7 +5,7 @@
     $user = cari_user();
     $iduser = $user['iduser'];
 
-    $data_transaksi = query("SELECT * FROM transaksi_penjualan WHERE idpelanggan = '$iduser'");
+    $data_transaksi = query("SELECT * FROM transaksi_penjualan WHERE idpelanggan = '$iduser' ORDER BY tgl_transaksi DESC");
 ?>
 
 <html lang="en">

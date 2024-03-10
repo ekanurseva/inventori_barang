@@ -2,7 +2,7 @@
     require_once '../controller/TransaksiPembelian.php';
 
     $data_pemasok = query("SELECT * FROM user WHERE level = 'Pemasok'");
-    $data_transaksi = query("SELECT * FROM transaksi_pembelian");
+    $data_transaksi = query("SELECT * FROM transaksi_pembelian ORDER BY tgl_transaksi DESC");
 ?>
 
 <html lang="en">

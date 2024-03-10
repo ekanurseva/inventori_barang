@@ -1,3 +1,9 @@
+<?php 
+    require_once '../controller/UserController.php';
+
+    $data_pemasok = query("SELECT * FROM user WHERE level = 'Pemasok'");
+?>
+
 <html lang="en">
 
 <head>
@@ -46,6 +52,7 @@
                         <table id="example" class="table table-hover text-center">
                             <thead>
                                 <tr class="table-secondary">
+                                    <th class="text-center" scope="col">No</th>
                                     <th class="text-center" scope="col">Nama</th>
                                     <th class="text-center" scope="col">Instansi</th>
                                     <th class="text-center" scope="col">No Handphone</th>
@@ -53,22 +60,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        Siti
-                                    </td>
-                                    <td>
-                                        PT. Apa
-                                    </td>
-                                    <td>
-                                        0893621329311
-                                    </td>
-                                    <td>
-                                        <a href="../admin/detail_pemasok.php" class="btn btn-sm btn-primary">
-                                            Detail
-                                        </a>
-                                    </td>
-                                </tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($data_pemasok as $pemasok) :
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i; ?>
+                                        </td>
+                                        <td>
+                                            <?= $pemasok['nama']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $pemasok['instansi']; ?>
+                                        </td>
+                                        <td>
+                                            <?= $pemasok['telepon']; ?>
+                                        </td>
+                                        <td>
+                                            <a href="../admin/detail_pemasok.php?id=<?= enkripsi($pemasok['iduser']); ?>" class="btn btn-sm btn-primary">
+                                                Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php 
+                                    $i++;
+                                    endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>

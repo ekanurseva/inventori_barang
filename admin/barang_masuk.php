@@ -1,7 +1,7 @@
 <?php 
     require_once '../controller/TransaksiPembelian.php';
 
-    $data_transaksi = query("SELECT * FROM transaksi_pembelian");
+    $data_transaksi = query("SELECT * FROM transaksi_pembelian WHERE status ='Selesai'");
 ?>
 
 <html lang="en">

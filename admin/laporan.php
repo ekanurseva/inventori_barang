@@ -1,3 +1,13 @@
+<?php 
+    require_once '../controller/MainController.php';
+
+    $barang_masuk = query("SELECT * FROM transaksi_pembelian WHERE status ='Selesai'");
+    $barang_keluar = query("SELECT * FROM transaksi_penjualan WHERE status ='Selesai'");
+    $permintaan_barang = query("SELECT * FROM transaksi_pembelian");
+    $barang = query("SELECT * FROM barang");
+
+?>
+
 <html lang="en">
 
 <head>
@@ -49,7 +59,7 @@
                                     <h6 class="card-header fw-bold">Laporan Barang Masuk</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang Masuk</h6>
-                                        <p class="card-text text-center">5</p>
+                                        <p class="card-text text-center"><?= count($barang_masuk); ?></p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -74,7 +84,7 @@
                                     <h6 class="card-header fw-bold">Laporan Barang Keluar</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang Keluar</h6>
-                                        <p class="card-text text-center">5</p>
+                                        <p class="card-text text-center"><?= count($barang_keluar); ?></p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -99,7 +109,7 @@
                                     <h6 class="card-header fw-bold">Laporan Permintaan Barang</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Permintaan Barang</h6>
-                                        <p class="card-text text-center">5</p>
+                                        <p class="card-text text-center"><?= count($permintaan_barang); ?></p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -127,7 +137,7 @@
                                     <h6 class="card-header fw-bold">Laporan Daftar Barang</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang</h6>
-                                        <p class="card-text text-center">5</p>
+                                        <p class="card-text text-center"><?= count($barang); ?></p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -151,7 +161,7 @@
                                     <h6 class="card-header fw-bold">Laporan Stok Barang</h6>
                                     <div class="card-body">
                                         <h6 class="card-title text-center">Jumlah Barang</h6>
-                                        <p class="card-text text-center">5</p>
+                                        <p class="card-text text-center"><?= count($barang); ?></p>
                                         <div class="text-center">
                                             <div class="row">
                                                 <div class="col-6">
@@ -185,7 +195,8 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form action="../laporan/masuk.php" method="post">
+                            <form id="laporanForm">
+                                <input type="hidden" name="ke" id="ke" value="masuk.php">
                                 <div class="modal-body">
                                     <p>Pilih range tanggal laporan barang masuk yang ingin ditampilkan</p>
 
@@ -199,10 +210,9 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
+                                    <button type="submit" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" name="laporan_masuk"
-                                        target="_blank">Pilih</button>
+                                    <button type="button" class="btn btn-primary" id="submitBtn">Pilih</button>
                                 </div>
                             </form>
                         </div>
@@ -221,24 +231,24 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form action="../laporan/keluar.php" method="post">
+                            <form id="laporanForm">
+                                <input type="hidden" name="ke2" id="ke2" value="keluar.php">
                                 <div class="modal-body">
                                     <p>Pilih range tanggal laporan barang keluar yang ingin ditampilkan</p>
 
                                     <label for="dari" class="form-label">Dari</label>
-                                    <input type="date" class="form-control" id="dari" name="dari">
+                                    <input type="date" class="form-control" id="dari2" name="dari2">
 
                                     <label for="sampai" class="form-label mt-3">Sampai</label>
-                                    <input type="date" class="form-control" id="sampai" name="sampai">
+                                    <input type="date" class="form-control" id="sampai2" name="sampai2">
 
                                     <p class="mt-5">*kosongkan jika ingin melihat seluruh laporan barang keluar</p>
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
+                                    <button type="submit" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" name="laporan_keluar"
-                                        target="_blank">Pilih</button>
+                                    <button type="button" class="btn btn-primary" id="submitBtn2">Pilih</button>
                                 </div>
                             </form>
                         </div>
@@ -257,24 +267,24 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form action="../laporan/permintaan.php" method="post">
+                            <form id="laporanForm">
+                                <input type="hidden" name="ke" id="ke3" value="permintaan.php">
                                 <div class="modal-body">
                                     <p>Pilih range tanggal laporan permintaan barang yang ingin ditampilkan</p>
 
                                     <label for="dari" class="form-label">Dari</label>
-                                    <input type="date" class="form-control" id="dari" name="dari">
+                                    <input type="date" class="form-control" id="dari3" name="dari3">
 
                                     <label for="sampai" class="form-label mt-3">Sampai</label>
-                                    <input type="date" class="form-control" id="sampai" name="sampai">
+                                    <input type="date" class="form-control" id="sampai3" name="sampai3">
 
                                     <p class="mt-5">*kosongkan jika ingin melihat seluruh laporan permintaan barang</p>
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
+                                    <button type="submit" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" name="laporan_permintaan"
-                                        target="_blank">Pilih</button>
+                                    <button type="button" class="btn btn-primary" id="submitBtn3">Pilih</button>
                                 </div>
                             </form>
                         </div>
@@ -297,6 +307,38 @@
     <script>
         $(document).ready(function () {
             $("#example").DataTable();
+        });
+    </script>
+
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            var dari = document.getElementById('dari').value;
+            var sampai = document.getElementById('sampai').value;
+            var ke = document.getElementById('ke').value;
+
+            var url = '../laporan/' + ke + '?dari=' + dari + '&sampai=' + sampai;
+
+            window.open(url, '_blank');
+        });
+
+        document.getElementById('submitBtn2').addEventListener('click', function() {
+            var dari2 = document.getElementById('dari2').value;
+            var sampai2 = document.getElementById('sampai2').value;
+            var ke2 = document.getElementById('ke2').value;
+
+            var url = '../laporan/' + ke2 + '?dari=' + dari2 + '&sampai=' + sampai2;
+
+            window.open(url, '_blank');
+        });
+
+        document.getElementById('submitBtn3').addEventListener('click', function() {
+            var dari3 = document.getElementById('dari3').value;
+            var sampai3 = document.getElementById('sampai3').value;
+            var ke3 = document.getElementById('ke3').value;
+
+            var url = '../laporan/' + ke3 + '?dari=' + dari3 + '&sampai=' + sampai3;
+
+            window.open(url, '_blank');
         });
     </script>
 </body>

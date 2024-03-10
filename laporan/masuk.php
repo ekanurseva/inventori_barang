@@ -1,5 +1,29 @@
 <?php
 require_once '../vendor/autoload.php'; // Mengimpor DomPDF
+require_once '../controller/MainController.php';
+
+$dari = $_GET['dari'];
+$sampai = $_GET['sampai'];
+
+if($sampai != "") {
+    $timestamp = strtotime($sampai);
+    $sampai_1 = $timestamp + (1 * 24 * 60 * 60);
+
+    $sampai_1hari = date("Y-m-d", $sampai_1);
+}
+
+if($dari != "" && $sampai != "") {
+    $data_masuk = query("SELECT idtransaksi FROM barang_masuk WHERE tgl_masuk < '$sampai_1hari' AND tgl_masuk >= '$dari' AND tgl_masuk IS NOT null GROUP BY idtransaksi");
+} elseif($dari == "" && $sampai == "") {
+    $data_masuk = query("SELECT idtransaksi FROM barang_masuk WHERE tgl_masuk IS NOT null GROUP BY idtransaksi");
+} elseif($sampai == "") {
+    $data_masuk = query("SELECT idtransaksi FROM barang_masuk WHERE tgl_masuk >= '$dari' AND tgl_masuk IS NOT null GROUP BY idtransaksi");    
+} elseif($dari == "") {
+    $data_masuk = query("SELECT idtransaksi FROM barang_masuk WHERE tgl_masuk < '$sampai_1hari' AND tgl_masuk IS NOT null GROUP BY idtransaksi");
+}
+
+$i = 1;
+$total = 0;
 
 use Dompdf\Dompdf;
 
@@ -60,16 +84,57 @@ $html = '<!DOCTYPE html>
                 <th>JUMLAH</th>
                 <th>TOTAL JUMLAH</th>
             </tr>';
+foreach($data_masuk as $id) {
+    $idtransaksi = $id['idtransaksi'];
+    $transaksi = query("SELECT * FROM transaksi_pembelian WHERE idtransaksi = $idtransaksi")[0];
 
-$html .= '<tr>
-                            <td>1</td>
-                            <td>S001001</td>
-                            <td>12-12-2023 | 10:12:05</td>
-                            <td>Pemasok 1</td>
-                            <td>Tepung</td>
-                            <td>2</td>
-                            <td>Rp 100.000</td>
-                        </tr>';
+    $idpemasok = $transaksi['idpemasok'];
+    $nama_pemasok = query("SELECT nama FROM user WHERE iduser = $idpemasok")[0];
+
+    $bahan = query("SELECT * FROM barang_masuk WHERE idtransaksi = $idtransaksi");
+    $tanggal = date("d-m-Y | H:i:s", strtotime($bahan[0]['tgl_masuk']));
+
+    $total_satuan = 0;
+    
+    foreach($bahan as $item){
+        $idbahan = $item['idbahan'];
+
+        $item_bahan = query("SELECT harga FROM bahan_pemasok WHERE idbahan = $idbahan")[0];
+
+        $total_satuan += $item['qty'] * $item_bahan['harga'];
+    }
+
+    $total += $total_satuan;
+
+    $html .= '<tr>
+                                <td>' . $i . '</td>
+                                <td>' . $transaksi['kode_transaksi'] . '</td>
+                                <td>' . $tanggal . '</td>
+                                <td>' . $nama_pemasok['nama'] . '</td>
+                                <td>
+                                    <ul style="padding-left: 10px;">';
+                                        foreach($bahan as $item){
+                                            $idbahan = $item['idbahan'];
+
+                                            $item_bahan = query("SELECT nama_bahan FROM bahan_pemasok WHERE idbahan = $idbahan")[0];
+                                            $html .= '<li>' . $item_bahan['nama_bahan'] .  '</li>';
+                                        }
+                                    $html .= '</ul>
+                                </td>
+                                <td>
+                                    <ul style="padding-left: 10px;">';
+                                        foreach($bahan as $item){
+                                            $idbahan = $item['idbahan'];
+
+                                            $item_bahan = query("SELECT satuan FROM bahan_pemasok WHERE idbahan = $idbahan")[0];
+                                            $html .= '<li>' . $item['qty'] . " " . $item_bahan['satuan'] .  '</li>';
+                                        }
+                                    $html .= '</ul>
+                                </td>
+                                <td>Rp ' . number_format($total_satuan, 0, ',' , '.') . '</td>
+                            </tr>';
+    $i++;
+}
 $html .= '<tr>
                 <td></td>
                 <td></td>
@@ -77,7 +142,7 @@ $html .= '<tr>
                 <td></td>
                 <td></td>
                 <th>TOTAL KESELURUHAN</th>
-                <th>Rp 100.000</th>
+                <th>Rp ' . number_format($total, 0, ',' , '.') . '</th>
             </tr>
 </table>
 
