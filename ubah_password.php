@@ -1,3 +1,49 @@
+<?php
+require_once 'controller/UserController.php';
+setcookie('SIIB', '', time() - 3600);
+
+if (isset($_GET['key'])) {
+    $email = dekripsi($_GET['key']);
+
+    $result = mysqli_query($conn, "SELECT email FROM user WHERE email = '$email'");
+
+    if (!mysqli_fetch_assoc($result)) {
+        $_SESSION["gagal"] = "Email tidak ditemukan";
+        echo "
+            <script>
+                document.location.href='login.php';
+            </script>";
+        exit();
+    } else {
+        $data = query("SELECT * FROM user WHERE email = '$email'")[0];
+    }
+} else {
+    echo "<script>
+            document.location.href='login.php';
+        </script>";
+}
+
+if (isset($_POST['submit'])) {
+    $errors = update_password($_POST);
+
+    if (is_numeric($errors)) {
+        $_SESSION["berhasil"] = "Ubah Password Berhasil!";
+        echo "
+        <script>
+          document.location.href='login.php';
+        </script>
+        ";
+    } else {
+        $_SESSION["gagal"] = "Ubah Password Gagal!";
+        echo "
+              <script>
+                document.location.href='login.php';
+              </script>
+          ";
+    }
+}
+?>
+
 <html lang="en">
 
 <head>
@@ -33,12 +79,18 @@
                         <input type="hidden" name="iduser" value="<?= $data['iduser']; ?>">
 
                         <div class="mb-3 fs-5">
-                            <input type="text" class="form-control" name="nama" placeholder="Nama" value="Nama User"
-                                disabled>
+                            <input type="text" class="form-control" name="nama" placeholder="Nama"
+                                value="<?= $data['nama']; ?>" disabled>
                         </div>
-                        <div class="mb-4 fs-5">
-                            <input type="password" class="form-control" name="password" placeholder="Password"
-                                id="password">
+                        <div class="mb-3 fs-5">
+                            <input type="password"
+                                class="form-control <?= isset($errors['password']) ? 'is-invalid' : ''; ?>"
+                                placeholder="Password" name="password">
+                            <?php if (isset($errors['password'])): ?>
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    <?= $errors['password']; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <div class="mb-4 fs-5">
                             <input type="password" class="form-control" name="password2"
