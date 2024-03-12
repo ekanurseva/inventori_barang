@@ -186,7 +186,7 @@ if (isset($_POST['submit'])) {
                         </div>
 
                         <div class="mb-3 mt-3 row ms-5">
-                            <label for="keterangan" class="col-sm-2 me-0 col-form-label">Keterangan Barang:</label>
+                            <label for="keterangan" class="col-sm-2 me-0 col-form-label">Keterangan:</label>
                             <div class="col-sm-8">
                                 <textarea <?= isset($errors['keterangan']) ? '' : 'style="border: 1px solid black;"'; ?>
                                     class="form-control <?= isset($errors['keterangan']) ? 'is-invalid' : ''; ?>"
@@ -227,6 +227,7 @@ if (isset($_POST['submit'])) {
                             <button type="submit" class="btn btn-primary mt-3 px-4" style="border-radius: 15px;"
                                 name="submit">Submit</button>
                         </div>
+
                     </form>
                 </div>
             </div>
